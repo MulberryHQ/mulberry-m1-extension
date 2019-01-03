@@ -1,0 +1,52 @@
+<?php
+/**
+ * @category Mulberry
+ * @package Mulberry\Warranty
+ * @author Dmitrijs Sitovs <info@scandiweb.com / dmitrijssh@scandiweb.com / dsitovs@gmail.com>
+ * @copyright Copyright (c) 2018 Scandiweb, Ltd (http://scandiweb.com)
+ * @license http://opensource.org/licenses/OSL-3.0 The Open Software License 3.0 (OSL-3.0)
+ */
+?>
+
+<?php
+/**
+ * @var $this Mulberry_Warranty_Block_Catalog_Product_View_Warranty_Container
+ */
+?>
+<?php $product = $this->getProduct(); ?>
+<?php $buttonTitle = __('Add to Cart'); ?>
+
+<?php if ($product->isSaleable()): ?>
+    <?php if ($this->hasOptions()): ?>
+        <div class="product-options product-options-mulberry">
+            <div class="mulberry-inline-container"></div>
+            <input type="hidden" id="warranty" name="warranty[<?php echo $this->escapeHtml($product->getSku()); ?>]" value=""/>
+        </div>
+    <?php else: ?>
+        <div class="product-options-mulberry">
+            <div class="mulberry-inline-container"></div>
+            <input type="hidden" id="warranty" name="warranty[<?php echo $this->escapeHtml($product->getSku()); ?>]" value=""/>
+        </div>
+    <?php endif; ?>
+
+    <script type="text/javascript">
+        window.mulberryProductData = {
+            product: {
+                id: "<?= $this->escapeHtml($product->getSku()); ?>",
+                title: "<?= $this->escapeHtml($this->quoteEscape($product->getName())); ?>",
+                price: <?= (float)$product->getFinalPrice(); ?>,
+                description: "<?= $this->escapeHtml($product->getDescription()); ?>"
+            },
+            originalSku: "<?= $this->escapeHtml($product->getSku()); ?>",
+            originalPrice: <?= (float)$product->getFinalPrice(); ?>,
+            originalDescription: "<?= $this->escapeHtml($product->getDescription()); ?>"
+        };
+
+        window.mulberryConfigData = {
+            "containerClass": "mulberry-inline-container",
+            "magentoDomain": "<?= $this->getPlatformDomain(); ?>",
+            "mulberryUrl": "<?= $this->getApiUrl(); ?>",
+            "partnerUrl": "<?= $this->getPartnerUrl(); ?>"
+        };
+    </script>
+<?php endif; ?>

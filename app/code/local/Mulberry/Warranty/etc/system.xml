@@ -1,0 +1,117 @@
+<?xml version="1.0"?><!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magento.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magento.com for more information.
+ *
+ * @category    Mage
+ * @package     Mage_CatalogInventory
+ * @copyright   Copyright (c) 2006-2018 Magento, Inc. (http://www.magento.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<config>
+    <tabs>
+        <mulberry translate="label" module="mulberry_warranty">
+            <label>Mulberry</label>
+            <sort_order>250</sort_order>
+        </mulberry>
+    </tabs>
+    <sections>
+        <mulberry_warranty translate="label" module="mulberry_warranty">
+            <label>Warranty</label>
+            <tab>mulberry</tab>
+            <frontend_type>text</frontend_type>
+            <sort_order>60</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>1</show_in_website>
+            <show_in_store>1</show_in_store>
+            <groups>
+                <general translate="label">
+                    <label>General</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>1</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>0</show_in_store>
+                    <fields>
+                        <active translate="label comment">
+                            <label>Enable Mulberry Warranty Block</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>5</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </active>
+                        <api_url translate="label comment">
+                            <label>Mulberry API URL</label>
+                            <frontend_type>text</frontend_type>
+                            <comment><![CDATA[
+                            API URL used for Mulberry requests,
+                            - Staging value example: https://staging.getmulberry.com
+                            - Production value: TBD ]]></comment>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </api_url>
+                        <partner_url translate="label comment">
+                            <label>Mulberry Partner Base URL</label>
+                            <frontend_type>text</frontend_type>
+                            <comment><![CDATA[
+                    Mulberry Partner URL used for Mulberry requests,
+                    - Staging value example: https://partner-staging.getmulberry.com
+                    - Production value: TBD ]]></comment>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </partner_url>
+                        <platform_domain translate="label comment">
+                            <label>Platform Domain Name</label>
+                            <frontend_type>text</frontend_type>
+                            <comment><![CDATA[Used for API init, if no value is set, $_SERVER['SERVER_NAME'] is used. ]]></comment>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </platform_domain>
+                        <retailer_id translate="label comment">
+                            <label>Mulberry Retailer ID</label>
+                            <frontend_type>text</frontend_type>
+                            <comment><![CDATA[Retailer ID used for send order API call.]]></comment>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </retailer_id>
+                        <api_token translate="label comment">
+                            <label>Mulberry API Token</label>
+                            <frontend_type>text</frontend_type>
+                            <comment><![CDATA[Auth token to be used for API calls.]]></comment>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </api_token>
+                    </fields>
+                </general>
+            </groups>
+        </mulberry_warranty>
+    </sections>
+</config>

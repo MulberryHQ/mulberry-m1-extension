@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Mulberry_Warranty>
+            <active>true</active>
+            <codePool>local</codePool>
+            <depends>
+                <Mage_Catalog/>
+                <Mage_CatalogInventory/>
+                <Mage_Sales/>
+                <Mage_Checkout/>
+            </depends>
+        </Mulberry_Warranty>
+    </modules>
+</config>

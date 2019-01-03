@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @category Mulberry
+ * @package Mulberry\Warranty
+ * @author Dmitrijs Sitovs <info@scandiweb.com / dmitrijssh@scandiweb.com / dsitovs@gmail.com>
+ * @copyright Copyright (c) 2018 Scandiweb, Ltd (http://scandiweb.com)
+ * @license http://opensource.org/licenses/OSL-3.0 The Open Software License 3.0 (OSL-3.0)
+ */
+-->
+<layout version="0.1.0">
+    <mulberry_product>
+        <reference name="head">
+            <action method="addItem">
+                <type>js</type>
+                <name>mulberry/library.js</name>
+            </action>
+            <action method="addItem">
+                <type>js</type>
+                <name>mulberry/product-page.js</name>
+            </action>
+        </reference>
+        <reference name="product.info">
+            <block type="mulberry_warranty/catalog_product_view_warranty_container" name="mulberry.warranty.container" as="extra_buttons" template="mulberry/catalog/product/view/warranty/container.phtml" after="-"/>
+        </reference>
+
+        <reference name="product.info.container1">
+            <action method="append">
+                <block>mulberry.warranty.container</block>
+            </action>
+        </reference>
+    </mulberry_product>
+
+    <PRODUCT_TYPE_simple>
+        <update handle="mulberry_product"/>
+    </PRODUCT_TYPE_simple>
+
+    <PRODUCT_TYPE_configurable>
+        <update handle="mulberry_product"/>
+    </PRODUCT_TYPE_configurable>
+
+    <default>
+        <reference name="minicart_content">
+            <action method="addItemRender">
+                <type>warranty</type>
+                <block>mulberry_warranty/checkout_cart_item_renderer</block>
+                <template>mulberry/checkout/cart/minicart/warranty.phtml</template>
+            </action>
+        </reference>
+    </default>
+
+    <checkout_cart_index>
+        <reference name="checkout.cart">
+            <action method="addItemRender">
+                <type>warranty</type>
+                <block>mulberry_warranty/checkout_cart_item_renderer</block>
+                <template>mulberry/checkout/cart/item/warranty.phtml</template>
+            </action>
+        </reference>
+    </checkout_cart_index>
+
+    <checkout_onepage_review>
+        <reference name="root">
+            <action method="addItemRender">
+                <type>warranty</type>
+                <block>mulberry_warranty/checkout_cart_item_renderer</block>
+                <template>checkout/onepage/review/item.phtml</template>
+            </action>
+        </reference>
+    </checkout_onepage_review>
+</layout>

@@ -1,0 +1,129 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @category Mulberry
+ * @package Mulberry\Warranty
+ * @author Dmitrijs Sitovs <info@scandiweb.com / dmitrijssh@scandiweb.com / dsitovs@gmail.com>
+ * @copyright Copyright (c) 2018 Scandiweb, Ltd (http://scandiweb.com)
+ * @license http://opensource.org/licenses/OSL-3.0 The Open Software License 3.0 (OSL-3.0)
+ */
+-->
+<config>
+    <modules>
+        <Mulberry_Warranty>
+            <version>0.1.0</version>
+        </Mulberry_Warranty>
+    </modules>
+    <global>
+        <models>
+            <mulberry_warranty>
+                <class>Mulberry_Warranty_Model</class>
+            </mulberry_warranty>
+        </models>
+        <blocks>
+            <mulberry_warranty>
+                <class>Mulberry_Warranty_Block</class>
+            </mulberry_warranty>
+            <catalog>
+                <rewrite>
+                    <product_view_options>Mulberry_Warranty_Block_Product_View_Options</product_view_options>
+                    <product_view_type_configurable>Mulberry_Warranty_Block_Product_View_Type_Configurable</product_view_type_configurable>
+                </rewrite>
+            </catalog>
+        </blocks>
+        <helpers>
+            <mulberry_warranty>
+                <class>Mulberry_Warranty_Helper</class>
+            </mulberry_warranty>
+        </helpers>
+        <resources>
+            <mulberry_warranty_setup>
+                <setup>
+                    <module>Mulberry_Warranty</module>
+                    <class>Mage_Eav_Model_Entity_Setup</class>
+                </setup>
+            </mulberry_warranty_setup>
+        </resources>
+        <catalog>
+            <product>
+                <type>
+                    <warranty translate="label" module="mulberry_warranty">
+                        <label>Warranty Product</label>
+                        <model>mulberry_warranty/product_type_warranty</model>
+                        <composite>0</composite>
+                        <index_priority>30</index_priority>
+                    </warranty>
+                </type>
+            </product>
+        </catalog>
+    </global>
+    <frontend>
+        <routers>
+            <mulberry_warranty>
+                <use>standard</use>
+                <args>
+                    <module>Mulberry_Warranty</module>
+                    <frontName>apps</frontName>
+                </args>
+            </mulberry_warranty>
+        </routers>
+        <layout>
+            <updates>
+                <mulberry_warranty module="Mulberry_Warranty">
+                    <file>mulberry_warranty.xml</file>
+                </mulberry_warranty>
+            </updates>
+        </layout>
+        <events>
+            <checkout_cart_product_add_after>
+                <observers>
+                    <add_mulberry_warranty>
+                        <type>singleton</type>
+                        <class>mulberry_warranty/observer</class>
+                        <method>addWarrantyProduct</method>
+                    </add_mulberry_warranty>
+                </observers>
+            </checkout_cart_product_add_after>
+            <sales_quote_item_set_product>
+                <observers>
+                    <set_mulberry_warranty_product_name>
+                        <type>singleton</type>
+                        <class>mulberry_warranty/observer</class>
+                        <method>setWarrantyProductName</method>
+                    </set_mulberry_warranty_product_name>
+                </observers>
+            </sales_quote_item_set_product>
+            <checkout_submit_all_after>
+                <observers>
+                    <mulberry_send_order>
+                        <class>mulberry_warranty/observer</class>
+                        <method>sendOrder</method>
+                    </mulberry_send_order>
+                </observers>
+            </checkout_submit_all_after>
+            <order_cancel_after>
+                <observers>
+                    <mulberry_cancel_order>
+                        <class>mulberry_warranty/observer</class>
+                        <method>sendOrder</method>
+                    </mulberry_cancel_order>
+                </observers>
+            </order_cancel_after>
+            <event name="order_cancel_after">
+                <observer name="mulberry_cancel_order" instance="Mulberry\Warranty\Observer\CancelOrder"/>
+            </event>
+        </events>
+    </frontend>
+    <default>
+        <mulberry_warranty>
+            <general>
+                <active>1</active>
+                <api_url>https://staging.getmulberry.com</api_url>
+                <partner_url>https://partner-staging.getmulberry.com</partner_url>
+                <platform_domain>mulberry-staging.myshopify.com</platform_domain>
+                <retailer_id>scandiweb_placeholder</retailer_id>
+                <api_token>e19c3077e779e666029bbb5b0fae7962</api_token>
+            </general>
+        </mulberry_warranty>
+    </default>
+</config>
