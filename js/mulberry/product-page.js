@@ -36,7 +36,7 @@ jQuery(document).ready(function() {
     registerProduct: function registerProduct() {
       mbApi = new mulberry.MulberryApi(
         window.mulberryConfigData.partnerUrl,
-        "/index.php/apps/mulberry"
+        "/apps/mulberry"
       );
 
       jQuery.get(
