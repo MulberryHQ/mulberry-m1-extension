@@ -99,19 +99,20 @@
                         <class>mulberry_warranty/observer</class>
                         <method>sendOrder</method>
                     </mulberry_send_order>
+                    <mulberry_send_cart>
+                        <class>mulberry_warranty/observer</class>
+                        <method>sendCart</method>
+                    </mulberry_send_cart>
                 </observers>
             </checkout_submit_all_after>
             <order_cancel_after>
                 <observers>
                     <mulberry_cancel_order>
                         <class>mulberry_warranty/observer</class>
-                        <method>sendOrder</method>
+                        <method>cancelOrder</method>
                     </mulberry_cancel_order>
                 </observers>
             </order_cancel_after>
-            <event name="order_cancel_after">
-                <observer name="mulberry_cancel_order" instance="Mulberry\Warranty\Observer\CancelOrder"/>
-            </event>
         </events>
     </frontend>
     <default>

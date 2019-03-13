@@ -192,4 +192,21 @@ class Mulberry_Warranty_Model_Observer
             Mage::getModel('mulberry_warranty/api_rest_cancel_order')->cancelOrder($order);
         }
     }
+
+    /**
+     * Send order information to Mulberry
+     *
+     * @param Varien_Event_Observer $observer
+     */
+    public function sendCart(Varien_Event_Observer $observer)
+    {
+        /**
+         * @var Mage_Sales_Model_Order $order
+         */
+        $order = $observer->getEvent()->getOrder();
+
+        if (Mage::helper('mulberry_warranty')->isActive()) {
+            Mage::getModel('mulberry_warranty/api_rest_send_cart')->sendCart($order);
+        }
+    }
 }

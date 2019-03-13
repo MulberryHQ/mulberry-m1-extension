@@ -7,12 +7,12 @@
  * @license http://opensource.org/licenses/OSL-3.0 The Open Software License 3.0 (OSL-3.0)
  */
 
-class Mulberry_Warranty_Model_Api_Rest_Send_Order
+class Mulberry_Warranty_Model_Api_Rest_Send_Cart
 {
     /**
      * Endpoint URI for sending order information
      */
-    const ORDER_SEND_ENDPOINT_URL = '/api/checkout';
+    const ORDER_SEND_ENDPOINT_URL = '/api/carts';
 
     /**
      * @var Mulberry_Warranty_Model_Api_Rest_Service
@@ -20,34 +20,14 @@ class Mulberry_Warranty_Model_Api_Rest_Send_Order
     private $service;
 
     /**
-     * @var bool $orderHasWarrantyProducts
+     * @var array $itemsPayload
      */
-    private $orderHasWarrantyProducts = false;
-
-    /**
-     * @var array $warrantyItemsPayload
-     */
-    private $warrantyItemsPayload = array();
+    private $itemsPayload = array();
 
     /**
      * @var Mage_Sales_Model_Order $order
      */
     private $order;
-
-    /**
-     * Data mapping for warranty attributes,
-     * stored as follows:
-     * Magento additional information key => ['Mulberry API key']
-     *
-     * @var array $warrantyAttributesMapping
-     */
-    protected $warrantyAttributesMapping = [
-        'warranty_price' => ['cost'],
-        'service_type' => ['service_type'],
-        'warranty_hash' => ['warranty_hash'],
-        'duration_months' => ['duration_months'],
-        'product_name' => ['product', 'name'],
-    ];
 
     /**
      * Mulberry_Warranty_Model_Api_Rest_Send_Order constructor.
@@ -64,18 +44,19 @@ class Mulberry_Warranty_Model_Api_Rest_Send_Order
      *
      * @return mixed
      */
-    public function sendOrder(Mage_Sales_Model_Order $order)
+    public function sendCart(Mage_Sales_Model_Order $order)
     {
-        if (!Mage::helper('mulberry_warranty')->isActive()) {
+        /**
+         * @var $helper Mulberry_Warranty_Helper_Data
+         */
+        $helper = Mage::helper('mulberry_warranty');
+
+        if (!$helper->isActive() || !$helper->isSendCartDataEnabled()) {
             return array();
         }
 
         $this->order = $order;
         $this->prepareItemsPayload();
-
-        if (!$this->orderHasWarrantyProducts) {
-            return array();
-        }
 
         $payload = $this->getOrderPayload();
 
@@ -92,11 +73,15 @@ class Mulberry_Warranty_Model_Api_Rest_Send_Order
         /**
          * @var $item Mage_Sales_Model_Order_Item
          */
-        foreach ($this->order->getAllItems() as $item) {
+        foreach ($this->order->getAllVisibleItems() as $item) {
+            /**
+             * We don't need to send warranty products as a payload
+             */
             if ($item->getProductType() === Mulberry_Warranty_Model_Product_Type_Warranty::TYPE_ID) {
-                $this->orderHasWarrantyProducts = true;
-                $this->prepareItemPayload($item);
+                continue;
             }
+
+            $this->prepareItemPayload($item);
         }
     }
 
@@ -105,19 +90,11 @@ class Mulberry_Warranty_Model_Api_Rest_Send_Order
      */
     private function getOrderPayload()
     {
-        $order = $this->order;
-
-        $payload = [
-            'id' => $order->getIncrementId(),
-            'phone' => $order->getBillingAddress()->getTelephone(),
-            'email' => $order->getCustomerEmail(),
-            'retailer_id' => Mage::helper('mulberry_warranty')->getRetailerId(),
-            'cart_token' => $order->getIncrementId(),
+        return [
+            'line_items' => $this->itemsPayload,
             'billing_address' => $this->prepareAddressData(),
-            'line_items' => $this->warrantyItemsPayload,
+            'order_id' => $this->order->getIncrementId(),
         ];
-
-        return $payload;
     }
 
     /**
@@ -136,11 +113,14 @@ class Mulberry_Warranty_Model_Api_Rest_Send_Order
             'first_name' => $billingAddress->getFirstname(),
             'last_name' => $billingAddress->getLastname(),
             'address1' => $billingAddress->getStreet(1),
-            'address2' => $billingAddress->getStreet(2),
+            'phone' => $billingAddress->getTelephone(),
+            'email' => $billingAddress->getEmail(),
             'city' => $billingAddress->getCity(),
             'state' => $billingAddress->getRegionCode(),
-            'zip' => $billingAddress->getPostcode(),
             'country' => Mage::getModel('directory/country')->loadByCode($billingAddress->getCountryId())->getName(),
+            'address2' => $billingAddress->getStreet(2),
+            'country_code' => $billingAddress->getCountryId(),
+            'province_code' => $billingAddress->getRegionCode(),
         ];
     }
 
@@ -152,13 +132,11 @@ class Mulberry_Warranty_Model_Api_Rest_Send_Order
      */
     private function prepareItemPayload(Mage_Sales_Model_Order_Item $item)
     {
-        $warrantyProductData = $item->getBuyRequest()->getWarrantyProduct();
-
         for ($i = 0; $i < (int) $item->getQtyOrdered(); $i++) {
-            $this->warrantyItemsPayload[] = [
-                'id' => $item->getId(),
-                'quantity' => (int) 1,
-                'warranty_hash' => $warrantyProductData['warranty_hash']
+            $this->itemsPayload[] = [
+                'product_id' => $item->getId(),
+                'product_price' => $item->getPrice(),
+                'product_title' => $item->getName(),
             ];
         }
     }

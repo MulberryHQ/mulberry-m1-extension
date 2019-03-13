@@ -18,6 +18,7 @@ class Mulberry_Warranty_Helper_Data extends Mage_Core_Helper_Abstract
     const XML_PATH_PLATFORM_DOMAIN = 'mulberry_warranty/general/platform_domain';
     const XML_PATH_RETAILER_ID = 'mulberry_warranty/general/retailer_id';
     const XML_PATH_API_TOKEN = 'mulberry_warranty/general/api_token';
+    const XML_PATH_SEND_CART_DATA = 'mulberry_warranty/general/send_cart_data';
 
     /**
      * Return flag if Mulberry warranty functionality is enabled
@@ -77,5 +78,15 @@ class Mulberry_Warranty_Helper_Data extends Mage_Core_Helper_Abstract
     public function getApiToken()
     {
         return Mage::getStoreConfig(self::XML_PATH_API_TOKEN);
+    }
+
+    /**
+     * System config flag whether it's required to send tracking cart data on order place
+     *
+     * @return mixed
+     */
+    public function isSendCartDataEnabled()
+    {
+        return Mage::getStoreConfig(self::XML_PATH_SEND_CART_DATA);
     }
 }
