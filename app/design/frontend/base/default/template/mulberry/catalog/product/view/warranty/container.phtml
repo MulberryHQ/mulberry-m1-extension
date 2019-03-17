@@ -29,17 +29,21 @@
         </div>
     <?php endif; ?>
 
+    <?php
+    $description = $this->escapeHtml($product->getDescription());
+    $description = preg_replace('/\r|\n/', ' ', $description);
+    ?>
     <script type="text/javascript">
         window.mulberryProductData = {
             product: {
                 id: "<?= $this->escapeHtml($product->getSku()); ?>",
                 title: "<?= $this->escapeHtml($this->quoteEscape($product->getName())); ?>",
                 price: <?= (float)$product->getFinalPrice(); ?>,
-                description: "<?= $this->escapeHtml($product->getDescription()); ?>"
+                description: "<?= $description; ?>"
             },
             originalSku: "<?= $this->escapeHtml($product->getSku()); ?>",
             originalPrice: <?= (float)$product->getFinalPrice(); ?>,
-            originalDescription: "<?= $this->escapeHtml($product->getDescription()); ?>"
+            originalDescription: "<?= $description; ?>"
         };
 
         window.mulberryConfigData = {
