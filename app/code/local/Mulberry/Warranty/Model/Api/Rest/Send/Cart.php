@@ -116,7 +116,7 @@ class Mulberry_Warranty_Model_Api_Rest_Send_Cart
             'phone' => $billingAddress->getTelephone(),
             'email' => $billingAddress->getEmail(),
             'city' => $billingAddress->getCity(),
-            'zip' => $billingAddress->getPostCode(),
+            'zip' => $billingAddress->getPostcode(),
             'state' => $billingAddress->getRegionCode(),
             'country' => Mage::getModel('directory/country')->loadByCode($billingAddress->getCountryId())->getName(),
             'address2' => $billingAddress->getStreet(2),
