@@ -3,6 +3,7 @@
  * @category Mulberry
  * @package Mulberry\Warranty
  * @author Mulberry <support@getmulberry.com>
+ * @version 1.0.0
  * @copyright Copyright (c) 2018 Mulberry Technology Inc., Ltd (http://www.getmulberry.com)
  * @license http://opensource.org/licenses/OSL-3.0 The Open Software License 3.0 (OSL-3.0)
  */
