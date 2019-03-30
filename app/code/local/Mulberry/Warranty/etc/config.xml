@@ -119,6 +119,15 @@
             </checkout_submit_all_after>
         </events>
     </frontend>
+    <adminhtml>
+        <layout>
+            <updates>
+                <mulberry_warranty>
+                    <file>mulberry_warranty.xml</file>
+                </mulberry_warranty>
+            </updates>
+        </layout>
+    </adminhtml>
     <default>
         <mulberry_warranty>
             <general>

@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @category Mulberry
+ * @package Mulberry\Warranty
+ * @author Mulberry <support@getmulberry.com>
+ * @version 1.0.0
+ * @copyright Copyright (c) 2019 Mulberry Technology Inc., Ltd (http://www.getmulberry.com)
+ * @license http://opensource.org/licenses/OSL-3.0 The Open Software License 3.0 (OSL-3.0)
+ */
+-->
+
+<layout>
+    <adminhtml_sales_order_view>
+        <reference name="order_items">
+            <action method="addColumnRender"><column>name</column><block>mulberry_warranty/adminhtml_sales_items_column_warranty_name</block><template>sales/items/column/name.phtml</template><type>warranty</type></action>
+        </reference>
+    </adminhtml_sales_order_view>
+
+    <adminhtml_sales_order_invoice_new>
+        <reference name="order_items">
+            <action method="addColumnRender"><column>name</column><block>mulberry_warranty/adminhtml_sales_items_column_warranty_name</block><template>sales/items/column/name.phtml</template><type>warranty</type></action>
+        </reference>
+    </adminhtml_sales_order_invoice_new>
+
+    <adminhtml_sales_order_invoice_updateqty>
+        <reference name="order_items">
+            <action method="addColumnRender"><column>name</column><block>mulberry_warranty/adminhtml_sales_items_column_warranty_name</block><template>sales/items/column/name.phtml</template><type>warranty</type></action>
+        </reference>
+    </adminhtml_sales_order_invoice_updateqty>
+
+    <adminhtml_sales_order_invoice_view>
+        <reference name="order_items">
+            <action method="addColumnRender"><column>name</column><block>mulberry_warranty/adminhtml_sales_items_column_warranty_name</block><template>sales/items/column/name.phtml</template><type>warranty</type></action>
+        </reference>
+    </adminhtml_sales_order_invoice_view>
+
+    <adminhtml_sales_order_creditmemo_new>
+        <reference name="order_items">
+            <action method="addColumnRender"><column>name</column><block>mulberry_warranty/adminhtml_sales_items_column_warranty_name</block><template>sales/items/column/name.phtml</template><type>warranty</type></action>
+        </reference>
+    </adminhtml_sales_order_creditmemo_new>
+
+    <adminhtml_sales_order_creditmemo_updateqty>
+        <reference name="order_items">
+            <action method="addColumnRender"><column>name</column><block>mulberry_warranty/adminhtml_sales_items_column_warranty_name</block><template>sales/items/column/name.phtml</template><type>warranty</type></action>
+        </reference>
+    </adminhtml_sales_order_creditmemo_updateqty>
+
+    <adminhtml_sales_order_creditmemo_view>
+        <reference name="order_items">
+            <action method="addColumnRender"><column>name</column><block>mulberry_warranty/adminhtml_sales_items_column_warranty_name</block><template>sales/items/column/name.phtml</template><type>warranty</type></action>
+        </reference>
+    </adminhtml_sales_order_creditmemo_view>
+</layout>
