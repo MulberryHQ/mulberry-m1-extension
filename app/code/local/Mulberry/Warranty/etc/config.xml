@@ -12,7 +12,7 @@
 <config>
     <modules>
         <Mulberry_Warranty>
-            <version>1.0.0</version>
+            <version>1.1.0</version>
         </Mulberry_Warranty>
     </modules>
     <global>
@@ -62,11 +62,32 @@
                 <observers>
                     <mulberry_cancel_order>
                         <type>singleton</type>
-                        <class>mulberry_warranty/observer</class>
+                        <class>mulberry_warranty/observer_api</class>
                         <method>cancelOrder</method>
                     </mulberry_cancel_order>
                 </observers>
             </order_cancel_after>
+            <sales_order_place_before>
+                <observers>
+                    <mulberry_generate_uuid>
+                        <type>singleton</type>
+                        <class>mulberry_warranty/observer_api</class>
+                        <method>generateOrderUuid</method>
+                    </mulberry_generate_uuid>
+                </observers>
+            </sales_order_place_before>
+            <checkout_submit_all_after>
+                <observers>
+                    <mulberry_send_order>
+                        <class>mulberry_warranty/observer_api</class>
+                        <method>sendOrder</method>
+                    </mulberry_send_order>
+                    <mulberry_send_cart>
+                        <class>mulberry_warranty/observer_api</class>
+                        <method>sendCart</method>
+                    </mulberry_send_cart>
+                </observers>
+            </checkout_submit_all_after>
         </events>
     </global>
     <frontend>
@@ -105,18 +126,6 @@
                     </set_mulberry_warranty_product_name>
                 </observers>
             </sales_quote_item_set_product>
-            <checkout_submit_all_after>
-                <observers>
-                    <mulberry_send_order>
-                        <class>mulberry_warranty/observer</class>
-                        <method>sendOrder</method>
-                    </mulberry_send_order>
-                    <mulberry_send_cart>
-                        <class>mulberry_warranty/observer</class>
-                        <method>sendCart</method>
-                    </mulberry_send_cart>
-                </observers>
-            </checkout_submit_all_after>
         </events>
     </frontend>
     <adminhtml>

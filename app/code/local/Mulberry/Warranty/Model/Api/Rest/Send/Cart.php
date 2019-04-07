@@ -94,7 +94,7 @@ class Mulberry_Warranty_Model_Api_Rest_Send_Cart
         return [
             'line_items' => $this->itemsPayload,
             'billing_address' => $this->prepareAddressData(),
-            'order_id' => $this->order->getIncrementId(),
+            'order_id' => $this->order->getOrderIdentifier(),
         ];
     }
 

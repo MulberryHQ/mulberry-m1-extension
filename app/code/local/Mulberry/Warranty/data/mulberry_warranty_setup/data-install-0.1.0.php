@@ -21,14 +21,17 @@ class Warranty_Product_Setup
         $this->createWarrantyProduct();
     }
 
+    /**
+     * Create warranty product placeholder
+     */
     private function createWarrantyProduct()
     {
-        /**
-         * @var $product Mage_Catalog_Model_Product
-         */
-        $product = Mage::getModel('catalog/product')->load(self::WARRANTY_PRODUCT_SKU, 'sku');
+        if (!$product = Mage::getModel('catalog/product')->loadByAttribute('sku', self::WARRANTY_PRODUCT_SKU)) {
+            /**
+             * @var $product Mage_Catalog_Model_Product
+             */
+            $product = Mage::getModel('catalog/product');
 
-        if (!$product->getId()) {
             $product->setTypeId(Mulberry_Warranty_Model_Product_Type_Warranty::TYPE_ID)
                 ->setSku(self::WARRANTY_PRODUCT_SKU)
                 ->setName('Mulberry Warranty Product')
@@ -63,20 +66,22 @@ class Warranty_Product_Setup
          * Make these attributes applicable to warranty products
          */
         foreach ($fieldList as $field) {
-            $applyTo = explode(
-                ',',
-                $installer->getAttribute(Mage_Catalog_Model_Product::ENTITY, $field, 'apply_to')
-            );
-
-            if (!in_array(Mulberry_Warranty_Model_Product_Type_Warranty::TYPE_ID, $applyTo)) {
-                $applyTo[] = Mulberry_Warranty_Model_Product_Type_Warranty::TYPE_ID;
-
-                $installer->updateAttribute(
-                    Mage_Catalog_Model_Product::ENTITY,
-                    $field,
-                    'apply_to',
-                    implode(',', $applyTo)
+            if ($attributeApplyTo = $installer->getAttribute(Mage_Catalog_Model_Product::ENTITY, $field, 'apply_to')) {
+                $applyTo = explode(
+                    ',',
+                    $attributeApplyTo
                 );
+
+                if (!in_array(Mulberry_Warranty_Model_Product_Type_Warranty::TYPE_ID, $applyTo)) {
+                    $applyTo[] = Mulberry_Warranty_Model_Product_Type_Warranty::TYPE_ID;
+
+                    $installer->updateAttribute(
+                        Mage_Catalog_Model_Product::ENTITY,
+                        $field,
+                        'apply_to',
+                        implode(',', $applyTo)
+                    );
+                }
             }
         }
     }

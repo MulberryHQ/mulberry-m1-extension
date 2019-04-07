@@ -18,14 +18,9 @@ class Mulberry_Warranty_Model_Observer
     {
         try {
             /**
-             * @var Mage_Catalog_Model_Product $warrantyProduct
-             */
-            $warrantyProduct = $this->getWarrantyPlaceholderProduct();
-
-            /**
              * Add warranty products equal to the amount of original product added to cart.
              */
-            if (Mage::helper('mulberry_warranty')->isActive() && $warrantyProduct->getId()) {
+            if (Mage::helper('mulberry_warranty')->isActive()) {
                 /**
                  * @var Mage_Catalog_Model_Product $originalProduct
                  * @var Mage_Sales_Model_Quote $quote
@@ -60,6 +55,11 @@ class Mulberry_Warranty_Model_Observer
                          */
                         $options = $itemOptionHelper->prepareWarrantyOption($originalQuoteItem, $warrantyHash);
                         $warrantyOptions = $itemOptionHelper->prepareWarrantyInformation($warrantyHash);
+
+                        /**
+                         * @var Mage_Catalog_Model_Product $warrantyProduct
+                         */
+                        $warrantyProduct = $this->getWarrantyPlaceholderProduct($warrantyOptions);
 
                         $warrantyItemUpdater->addWarrantyItemOption($warrantyProduct, $options);
                         $warrantyItemUpdater->addAdditionalOptions($warrantyProduct, $warrantyOptions);
@@ -121,15 +121,18 @@ class Mulberry_Warranty_Model_Observer
     /**
      * Retrieve Magento placeholder product to be used as a warranty product
      *
+     * @param array $warrantyOptions
      * @return Mage_Core_Model_Abstract|Mage_Catalog_Model_Product
      */
-    protected function getWarrantyPlaceholderProduct()
+    protected function getWarrantyPlaceholderProduct($warrantyOptions = array())
     {
+        $placeholderSku = (is_array($warrantyOptions) && isset($warrantyOptions['duration_months'])) ? sprintf('mulberry-warranty-%s-months', $warrantyOptions['duration_months']) : 'mulberry-warranty-product';
+
         $productModel = Mage::getModel('catalog/product');
 
         return Mage::getModel('catalog/product')
             ->setStoreId(Mage::app()->getStore()->getId())
-            ->load($productModel->getIdBySku('mulberry-warranty-product'));
+            ->load($productModel->getIdBySku($placeholderSku));
     }
 
     /**
@@ -156,57 +159,6 @@ class Mulberry_Warranty_Model_Observer
 
         if ($quoteItem->getProductType() === Mulberry_Warranty_Model_Product_Type_Warranty::TYPE_ID) {
             Mage::helper('mulberry_warranty/item_updater')->updateWarrantyProductName($quoteItem);
-        }
-    }
-
-    /**
-     * Send order information to Mulberry
-     *
-     * @param Varien_Event_Observer $observer
-     */
-    public function sendOrder(Varien_Event_Observer $observer)
-    {
-        /**
-         * @var Mage_Sales_Model_Order $order
-         */
-        $order = $observer->getEvent()->getOrder();
-
-        if (Mage::helper('mulberry_warranty')->isActive()) {
-            Mage::getModel('mulberry_warranty/api_rest_send_order')->sendOrder($order);
-        }
-    }
-
-    /**
-     * Perform order cancellation for Mulberry warranty products
-     *
-     * @param Varien_Event_Observer $observer
-     */
-    public function cancelOrder(Varien_Event_Observer $observer)
-    {
-        /**
-         * @var Mage_Sales_Model_Order $order
-         */
-        $order = $observer->getEvent()->getOrder();
-
-        if (Mage::helper('mulberry_warranty')->isActive()) {
-            Mage::getModel('mulberry_warranty/api_rest_cancel_order')->cancelOrder($order);
-        }
-    }
-
-    /**
-     * Send order information to Mulberry
-     *
-     * @param Varien_Event_Observer $observer
-     */
-    public function sendCart(Varien_Event_Observer $observer)
-    {
-        /**
-         * @var Mage_Sales_Model_Order $order
-         */
-        $order = $observer->getEvent()->getOrder();
-
-        if (Mage::helper('mulberry_warranty')->isActive()) {
-            Mage::getModel('mulberry_warranty/api_rest_send_cart')->sendCart($order);
         }
     }
 }
