@@ -52,27 +52,4 @@
             <action method="addColumnRender"><column>name</column><block>mulberry_warranty/adminhtml_sales_items_column_warranty_name</block><template>sales/items/column/name.phtml</template><type>warranty</type></action>
         </reference>
     </adminhtml_sales_order_creditmemo_view>
-
-    <!-- Extend order grid information -->
-    <mulberry_order_grid_update_handle>
-        <reference name="sales_order.grid">
-            <action method="addColumnAfter">
-                <columnId>order_identifier</columnId>
-                <arguments>
-                    <header>Order Identifier</header>
-                    <index>order_identifier</index>
-                    <type>text</type>
-                </arguments>
-                <after>shipping_name</after>
-            </action>
-        </reference>
-    </mulberry_order_grid_update_handle>
-
-    <adminhtml_sales_order_grid>
-        <update handle="mulberry_order_grid_update_handle" />
-    </adminhtml_sales_order_grid>
-
-    <adminhtml_sales_order_index>
-        <update handle="mulberry_order_grid_update_handle" />
-    </adminhtml_sales_order_index>
 </layout>

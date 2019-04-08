@@ -22,6 +22,11 @@
             </mulberry_warranty>
         </models>
         <blocks>
+            <adminhtml>
+                <rewrite>
+                    <sales_order_grid>Mulberry_Warranty_Block_Adminhtml_Sales_Order_Grid</sales_order_grid>
+                </rewrite>
+            </adminhtml>
             <mulberry_warranty>
                 <class>Mulberry_Warranty_Block</class>
             </mulberry_warranty>
