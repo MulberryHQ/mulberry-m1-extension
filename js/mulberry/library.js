@@ -11,9 +11,7 @@ jQuery(document).ready(function() {
     /**
      * Register Mulberry library
      */
-    var loadLibrary = function () {
-        jQuery('body').trigger('processStart');
-
+    if (window.mulberryConfigData) {
         var element = document.createElement('script'),
             scriptTag = document.getElementsByTagName('script')[0],
             mulberryUrl = window.mulberryConfigData.mulberryUrl;
@@ -22,5 +20,5 @@ jQuery(document).ready(function() {
         element.src = mulberryUrl + '/plugin/static/js/mulberry.js';
 
         scriptTag.parentNode.insertBefore(element, scriptTag);
-    }();
+    }
 });
