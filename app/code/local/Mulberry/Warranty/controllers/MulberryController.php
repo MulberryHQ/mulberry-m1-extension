@@ -10,7 +10,7 @@ class Mulberry_Warranty_MulberryController extends Mage_Core_Controller_Front_Ac
         try {
             $payload = $this->_preparePayload();
         } catch (\Zend_Json_Exception $e) {
-            $payload = [];
+            $payload = array();
         }
 
         $result = Mage::getModel('mulberry_warranty/api_rest_get_personalized_warranty')->getWarrantiesJson($payload);
@@ -42,7 +42,7 @@ class Mulberry_Warranty_MulberryController extends Mage_Core_Controller_Front_Ac
      *
      * @return mixed
      */
-    protected function _getPayload(array $payload = [])
+    protected function _getPayload(array $payload = array())
     {
         $payload['token'] = Mage::helper('mulberry_warranty')->getApiToken();
 

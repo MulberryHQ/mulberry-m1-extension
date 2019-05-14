@@ -42,13 +42,13 @@ class Mulberry_Warranty_Model_Api_Rest_Send_Order
      *
      * @var array $warrantyAttributesMapping
      */
-    protected $warrantyAttributesMapping = [
-        'warranty_price' => ['cost'],
-        'service_type' => ['service_type'],
-        'warranty_hash' => ['warranty_hash'],
-        'duration_months' => ['duration_months'],
-        'product_name' => ['product', 'name'],
-    ];
+    protected $warrantyAttributesMapping = array(
+        'warranty_price' => array('cost'),
+        'service_type' => array('service_type'),
+        'warranty_hash' => array('warranty_hash'),
+        'duration_months' => array('duration_months'),
+        'product_name' => array('product', 'name'),
+    );
 
     /**
      * Mulberry_Warranty_Model_Api_Rest_Send_Order constructor.
@@ -108,7 +108,7 @@ class Mulberry_Warranty_Model_Api_Rest_Send_Order
     {
         $order = $this->order;
 
-        $payload = [
+        $payload = array(
             'id' => $order->getIncrementId(),
             'phone' => $order->getBillingAddress()->getTelephone(),
             'email' => $order->getCustomerEmail(),
@@ -116,7 +116,7 @@ class Mulberry_Warranty_Model_Api_Rest_Send_Order
             'cart_token' => $order->getIncrementId(),
             'billing_address' => $this->prepareAddressData(),
             'line_items' => $this->warrantyItemsPayload,
-        ];
+        );
 
         return $payload;
     }
@@ -133,7 +133,7 @@ class Mulberry_Warranty_Model_Api_Rest_Send_Order
          */
         $billingAddress = $this->order->getBillingAddress();
 
-        return [
+        return array(
             'first_name' => $billingAddress->getFirstname(),
             'last_name' => $billingAddress->getLastname(),
             'address1' => $billingAddress->getStreet(1),
@@ -142,7 +142,7 @@ class Mulberry_Warranty_Model_Api_Rest_Send_Order
             'state' => $billingAddress->getRegionCode(),
             'zip' => $billingAddress->getPostcode(),
             'country' => Mage::getModel('directory/country')->loadByCode($billingAddress->getCountryId())->getName(),
-        ];
+        );
     }
 
     /**
@@ -156,11 +156,11 @@ class Mulberry_Warranty_Model_Api_Rest_Send_Order
         $warrantyProductData = $item->getBuyRequest()->getWarrantyProduct();
 
         for ($i = 0; $i < (int) $item->getQtyOrdered(); $i++) {
-            $this->warrantyItemsPayload[] = [
+            $this->warrantyItemsPayload[] = array(
                 'id' => $item->getId(),
                 'quantity' => (int) 1,
-                'warranty_hash' => $warrantyProductData['warranty_hash']
-            ];
+                'warranty_hash' => $warrantyProductData['warranty_hash'],
+            );
         }
     }
 

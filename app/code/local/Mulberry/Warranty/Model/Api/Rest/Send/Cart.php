@@ -91,11 +91,11 @@ class Mulberry_Warranty_Model_Api_Rest_Send_Cart
      */
     private function getOrderPayload()
     {
-        return [
+        return array(
             'line_items' => $this->itemsPayload,
             'billing_address' => $this->prepareAddressData(),
             'order_id' => $this->order->getOrderIdentifier(),
-        ];
+        );
     }
 
     /**
@@ -110,7 +110,7 @@ class Mulberry_Warranty_Model_Api_Rest_Send_Cart
          */
         $billingAddress = $this->order->getBillingAddress();
 
-        return [
+        return array(
             'first_name' => $billingAddress->getFirstname(),
             'last_name' => $billingAddress->getLastname(),
             'address1' => $billingAddress->getStreet(1),
@@ -123,7 +123,7 @@ class Mulberry_Warranty_Model_Api_Rest_Send_Cart
             'address2' => $billingAddress->getStreet(2),
             'country_code' => $billingAddress->getCountryId(),
             'province_code' => $billingAddress->getRegionCode(),
-        ];
+        );
     }
 
     /**
@@ -135,11 +135,11 @@ class Mulberry_Warranty_Model_Api_Rest_Send_Cart
     private function prepareItemPayload(Mage_Sales_Model_Order_Item $item)
     {
         for ($i = 0; $i < (int) $item->getQtyOrdered(); $i++) {
-            $this->itemsPayload[] = [
+            $this->itemsPayload[] = array(
                 'product_id' => $item->getId(),
                 'product_price' => $item->getPrice(),
                 'product_title' => $item->getName(),
-            ];
+            );
         }
     }
 

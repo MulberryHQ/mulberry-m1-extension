@@ -101,12 +101,12 @@ class Mulberry_Warranty_Model_Observer
      * @return Varien_Object
      * @throws Mage_Core_Exception
      */
-    private function getProductRequest(array $requestInfo = [])
+    private function getProductRequest(array $requestInfo = array())
     {
         if ($requestInfo instanceof Varien_Object) {
             $request = $requestInfo;
         } elseif (is_numeric($requestInfo)) {
-            $request = new Varien_Object(['qty' => $requestInfo]);
+            $request = new Varien_Object(array('qty' => $requestInfo));
         } elseif (is_array($requestInfo)) {
             $request = new Varien_Object($requestInfo);
         } else {

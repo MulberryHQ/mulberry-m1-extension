@@ -90,10 +90,10 @@ class Mulberry_Warranty_Model_Api_Rest_Cancel_Order
     {
         $date = new Zend_Date();
 
-        $payload = [
+        $payload = array(
             'cancelled_date' => $date->toString('Y-m-d'),
             'line_items' => $this->warrantyItemsPayload,
-        ];
+        );
 
         return $payload;
     }
@@ -108,10 +108,10 @@ class Mulberry_Warranty_Model_Api_Rest_Cancel_Order
         $warrantyProductData = $item->getBuyRequest()->getWarrantyProduct();
 
         for ($i = 0; $i < (int) $item->getQtyCanceled(); $i++) {
-            $this->warrantyItemsPayload[] = [
+            $this->warrantyItemsPayload[] = array(
                 'order_id' => $item->getOrder()->getIncrementId(),
                 'warranty_hash' => $warrantyProductData['warranty_hash'],
-            ];
+            );
         }
     }
 

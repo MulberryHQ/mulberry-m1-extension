@@ -93,7 +93,7 @@ class Mulberry_Warranty_Model_Api_Rest_Service
      */
     private function processResponse($response)
     {
-        $data = [];
+        $data = array();
 
         if (is_array($response)) {
             return $response;
@@ -102,14 +102,14 @@ class Mulberry_Warranty_Model_Api_Rest_Service
         try {
             $data['result'] = Mage::helper('core')->jsonDecode((string)$response->getBody());
         } catch (\Exception $e) {
-            $data = [
+            $data = array(
                 'exception' => $e->getMessage(),
-            ];
+            );
         }
 
-        $data['response_object'] = [
+        $data['response_object'] = array(
             'response' => $response,
-        ];
+        );
 
         return $data;
     }
@@ -121,12 +121,12 @@ class Mulberry_Warranty_Model_Api_Rest_Service
      */
     private function logRequestResponse($request, $response, $url)
     {
-        $req = [
+        $req = array(
             'headers' => $this->headers,
             'body' => $request,
-        ];
+        );
 
-        Mage::log(['REQUEST' => $req, 'action' => $url], Zend_Log::DEBUG);
-        Mage::log(['RESPONSE' => $response, 'action' => $url,], Zend_Log::DEBUG);
+        Mage::log(array('REQUEST' => $req, 'action' => $url), Zend_Log::DEBUG);
+        Mage::log(array('RESPONSE' => $response, 'action' => $url), Zend_Log::DEBUG);
     }
 }

@@ -45,10 +45,10 @@ class Mulberry_Warranty_Helper_Item_Option_Helper extends Mage_Core_Helper_Abstr
      */
     public function prepareWarrantyOption(Mage_Sales_Model_Quote_Item $originalQuoteItem, $warrantyHash)
     {
-        return [
+        return array(
             'warranty_product' => $this->prepareWarrantyInformation($warrantyHash),
             'original_product' => $this->prepareProductInformation($originalQuoteItem),
-        ];
+        );
     }
 
     /**
@@ -80,9 +80,9 @@ class Mulberry_Warranty_Helper_Item_Option_Helper extends Mage_Core_Helper_Abstr
     {
         $originalProductBuyRequest = $originalQuoteItem->getBuyRequest();
 
-        return [
+        return array(
             'product' => $originalProductBuyRequest->getProduct(),
             'selected_configurable_option' => $originalProductBuyRequest->getSelectedConfigurableOption(),
-        ];
+        );
     }
 }

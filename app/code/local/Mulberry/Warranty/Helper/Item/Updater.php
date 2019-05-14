@@ -15,10 +15,10 @@ class Mulberry_Warranty_Helper_Item_Updater extends Mage_Core_Helper_Abstract
      *
      * @var array $warrantyAdditionalOptions
      */
-    protected $warrantyAdditionalOptions = [
+    protected $warrantyAdditionalOptions = array(
         'service_type',
         'duration_months',
-    ];
+    );
 
     /**
      * Set custom quote item name for warranty product
@@ -98,10 +98,10 @@ class Mulberry_Warranty_Helper_Item_Updater extends Mage_Core_Helper_Abstract
             if (in_array($key, $this->warrantyAdditionalOptions)) {
                 $label = ucwords(str_replace('_', ' ', $key));
 
-                $additionalOptions[] = [
+                $additionalOptions[] = array(
                     'label' => $this->__($label),
                     'value' => $value,
-                ];
+                );
             }
         }
 

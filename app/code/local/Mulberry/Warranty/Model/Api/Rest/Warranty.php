@@ -27,13 +27,13 @@ class Mulberry_Warranty_Model_Api_Rest_Warranty
      *
      * @var array $warrantyAttributesMapping
      */
-    protected $warrantyAttributesMapping = [
-        'warranty_price' => ['cost'],
-        'service_type' => ['service_type'],
-        'warranty_hash' => ['warranty_hash'],
-        'duration_months' => ['duration_months'],
-        'product_name' => ['product', 'name'],
-    ];
+    protected $warrantyAttributesMapping = array(
+        'warranty_price' => array('cost'),
+        'service_type' => array('service_type'),
+        'warranty_hash' => array('warranty_hash'),
+        'duration_months' => array('duration_months'),
+        'product_name' => array('product', 'name'),
+    );
 
     /**
      * Mulberry_Warranty_Model_Api_Rest_Warranty constructor.
@@ -74,13 +74,13 @@ class Mulberry_Warranty_Model_Api_Rest_Warranty
         $warrantyProduct = (is_array($response) && isset($response['result'][0][0])) ? $response['result'][0][0] : array();
 
         if (!empty($warrantyProduct) && $this->validateWarrantyProductResponse($warrantyProduct)) {
-            $result = [
+            $result = array(
                 'warranty_price' => (float) $warrantyProduct['cost'],
                 'service_type' => $warrantyProduct['service_type'],
                 'warranty_hash' => $warrantyProduct['warranty_hash'],
                 'duration_months' => $warrantyProduct['duration_months'],
                 'name' => sprintf('Warranty - %s', $warrantyProduct['product']['name']),
-            ];
+            );
         }
 
         return $result;
