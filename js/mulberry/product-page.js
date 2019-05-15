@@ -1,8 +1,8 @@
-jQuery(document).ready(function () {
-    var mbModal;
-    var mbInline;
-    var mbApi;
+var mbModal;
+var mbInline;
+var mbApi;
 
+jQuery(document).ready(function () {
     var MulberryProductPage = {
         element: jQuery("#product_addtocart_form"),
         productUpdateTimer: null,
@@ -57,6 +57,7 @@ jQuery(document).ready(function () {
 
                             if (settings.has_modal) {
                                 mbModal = new window.mulberry.MulberryModal();
+
                                 mbModal.init(
                                     window.mulberryProductData.product,
                                     "mb-modal",
@@ -234,8 +235,7 @@ jQuery(document).ready(function () {
 
             if (
                 !window.mulberry ||
-                !window.mulberry.mulberryModal ||
-                !window.mulberry.mulberryInline
+                !mbInline
             ) {
                 return;
             }
@@ -261,8 +261,6 @@ jQuery(document).ready(function () {
                                 const event = new CustomEvent('mulberry:update', { detail: { response } });
                                 document.dispatchEvent(event);
                             });
-
-                        window.mulberry.updateProduct(window.mulberryProductData.product);
                     }
                 }.bind(this),
                 this.mulberryProductUpdateDelay
