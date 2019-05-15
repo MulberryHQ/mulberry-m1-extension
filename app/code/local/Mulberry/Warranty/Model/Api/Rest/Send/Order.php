@@ -142,6 +142,8 @@ class Mulberry_Warranty_Model_Api_Rest_Send_Order
             'state' => $billingAddress->getRegionCode(),
             'zip' => $billingAddress->getPostcode(),
             'country' => Mage::getModel('directory/country')->loadByCode($billingAddress->getCountryId())->getName(),
+            'country_code' => $billingAddress->getCountryId(),
+            'province_code' => $billingAddress->getRegionCode(),
         );
     }
 
@@ -157,8 +159,9 @@ class Mulberry_Warranty_Model_Api_Rest_Send_Order
 
         for ($i = 0; $i < (int) $item->getQtyOrdered(); $i++) {
             $this->warrantyItemsPayload[] = array(
-                'id' => $item->getId(),
-                'quantity' => (int) 1,
+                'product_id' => $item->getId(),
+                'product_price' => $item->getPrice(),
+                'product_title' => $item->getName(),
                 'warranty_hash' => $warrantyProductData['warranty_hash'],
             );
         }

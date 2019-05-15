@@ -1,6 +1,7 @@
 jQuery(document).ready(function () {
     var mbModal;
     var mbInline;
+    var mbApi;
 
     var MulberryProductPage = {
         element: jQuery("#product_addtocart_form"),
@@ -47,8 +48,7 @@ jQuery(document).ready(function () {
                         return;
                     }
 
-                    mbApi
-                        .getWarrantyOffer(window.mulberryProductData.product)
+                    mbApi.getWarrantyOffer(window.mulberryProductData.product)
                         .then(data => data.json())
                         .then(data => {
                             if (data.length === 0) {
@@ -254,6 +254,14 @@ jQuery(document).ready(function () {
                             "name",
                             "warranty[" + window.mulberryProductData.product.id + "]"
                         );
+
+                        self.mbApi.getWarrantyOffer(window.mulberryProductData.product)
+                            .then(response => response.json())
+                            .then(response => {
+                                const event = new CustomEvent('mulberry:update', { detail: { response } });
+                                document.dispatchEvent(event);
+                            });
+
                         window.mulberry.updateProduct(window.mulberryProductData.product);
                     }
                 }.bind(this),
