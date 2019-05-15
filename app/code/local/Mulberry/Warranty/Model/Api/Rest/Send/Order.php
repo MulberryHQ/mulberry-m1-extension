@@ -113,7 +113,7 @@ class Mulberry_Warranty_Model_Api_Rest_Send_Order
             'phone' => $order->getBillingAddress()->getTelephone(),
             'email' => $order->getCustomerEmail(),
             'retailer_id' => Mage::helper('mulberry_warranty')->getRetailerId(),
-            'cart_token' => $order->getIncrementId(),
+            'cart_token' => $order->getOrderIdentifier(),
             'billing_address' => $this->prepareAddressData(),
             'line_items' => $this->warrantyItemsPayload,
         );
