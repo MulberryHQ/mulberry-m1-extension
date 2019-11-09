@@ -50,7 +50,8 @@
             "magentoDomain": "<?= $this->getPlatformDomain(); ?>",
             "mulberryUrl": "<?= $this->getApiUrl(); ?>",
             "partnerUrl": "<?= $this->getPartnerUrl(); ?>",
-            "retailerId": "<?= Mage::helper('mulberry_warranty')->getRetailerId() ?>"
+            "retailerId": "<?= $this->getRetailerId() ?>",
+            "publicToken": "<?= $this->getPublicToken(); ?>"
         };
     </script>
 <?php endif; ?>

@@ -47,4 +47,20 @@ class Mulberry_Warranty_Block_Catalog_Product_View_Warranty_Container extends Ma
     {
         return Mage::helper('mulberry_warranty')->getPlatformDomain() ?: $_SERVER['SERVER_NAME'];
     }
+
+    /**
+     * @return mixed
+     */
+    public function getRetailerId()
+    {
+        return Mage::helper('mulberry_warranty')->getRetailerId();
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPublicToken()
+    {
+        return Mage::helper('mulberry_warranty')->getPublicToken();
+    }
 }
