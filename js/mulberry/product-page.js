@@ -32,60 +32,71 @@ jQuery(document).ready(function () {
         /**
          * Init Mulberry product
          */
-        registerProduct: async function registerProduct() {
+        registerProduct: function registerProduct() {
             var self = this;
 
-            await window.mulberry.core.init({
+            window.mulberry.core.init({
                 publicToken: window.mulberryConfigData.publicToken
-            });
+            }).then(
+                self.registerOffers()
+            );
+        },
 
-            const offers = await window.mulberry.core.getWarrantyOffer(window.mulberryProductData.product);
-            const settings = window.mulberry.core.settings;
+        /**
+         * Register inline & modal offers
+         */
+        registerOffers: function registerOffers() {
+            var self = this;
 
-            if (settings.has_modal) {
-                await window.mulberry.modal.init({
-                    offers,
-                    settings,
-                    onWarrantySelect: function(warranty) {
-                        self.toggleMulberryWarranty(warranty, true);
+            window.mulberry.core.getWarrantyOffer(window.mulberryProductData.product)
+                .then(function (offers) {
+                    var settings = window.mulberry.core.settings;
 
-                        window.mulberry.modal.close();
-                        self.mulberryOverlayActive = true;
+                    if (settings.has_modal) {
+                        window.mulberry.modal.init({
+                            offers,
+                            settings,
+                            onWarrantySelect: function(warranty) {
+                                self.toggleMulberryWarranty(warranty, true);
 
-                        if ("undefined" !== typeof productAddToCartForm && productAddToCartForm) {
-                            productAddToCartForm.submit();
-                        }
+                                window.mulberry.modal.close();
+                                self.mulberryOverlayActive = true;
 
-                        self.mulberryOverlayActive = false;
+                                if ("undefined" !== typeof productAddToCartForm && productAddToCartForm) {
+                                    productAddToCartForm.submit();
+                                }
 
-                        /**
-                         * Reset value for warranty element
-                         */
-                        jQuery('#warranty').val('');
-                    },
-                    onWarrantyDecline: function() {
-                        window.mulberry.modal.close();
-                        self.mulberryOverlayActive = true;
+                                self.mulberryOverlayActive = false;
 
-                        if ("undefined" !== typeof productAddToCartForm && productAddToCartForm) {
-                            productAddToCartForm.submit();
-                        }
+                                /**
+                                 * Reset value for warranty element
+                                 */
+                                jQuery('#warranty').val('');
+                            },
+                            onWarrantyDecline: function() {
+                                window.mulberry.modal.close();
+                                self.mulberryOverlayActive = true;
 
-                        self.mulberryOverlayActive = false;
+                                if ("undefined" !== typeof productAddToCartForm && productAddToCartForm) {
+                                    productAddToCartForm.submit();
+                                }
+
+                                self.mulberryOverlayActive = false;
+                            }
+                        });
+                    }
+
+                    if (settings.has_inline) {
+                        window.mulberry.inline.init({
+                            offers: offers,
+                            settings: settings,
+                            selector: '.mulberry-inline-container',
+                            onWarrantyToggle: function(warranty) {
+                                self.toggleWarranty(warranty.offer, warranty.isSelected);
+                            }
+                        });
                     }
                 });
-            }
-
-            if (settings.has_inline) {
-                await window.mulberry.inline.init({
-                    offers: offers,
-                    settings: settings,
-                    selector: '.mulberry-inline-container',
-                    onWarrantyToggle: function(warranty) {
-                        self.toggleWarranty(warranty.offer, warranty.isSelected);
-                    }
-                });
-            }
         },
 
         /**
@@ -457,7 +468,7 @@ jQuery(document).ready(function () {
         /**
          * Override original Magento add to cart action
          */
-        registerModal: async function () {
+        registerModal: function () {
             var self = this;
 
             if ("undefined" !== typeof productAddToCartForm && productAddToCartForm) {
