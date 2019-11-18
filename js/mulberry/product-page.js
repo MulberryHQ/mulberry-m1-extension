@@ -16,8 +16,6 @@ jQuery(document).ready(function () {
          * Register events
          */
         addProductListeners: function addProductListeners() {
-            var self = this;
-
             this.prepareMulberryProduct();
 
             this.element.on('updateMulberryProduct', function (evt, newPrice) {
@@ -25,8 +23,8 @@ jQuery(document).ready(function () {
             }.bind(this));
 
             this.element.on('toggleWarranty', function (evt, params) {
-                self.toggleWarranty(params.data, params.isSelected);
-            });
+                this.toggleWarranty(params.data, params.isSelected);
+            }.bind(this));
         },
 
         /**
