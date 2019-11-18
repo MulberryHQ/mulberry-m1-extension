@@ -16,14 +16,16 @@ jQuery(document).ready(function () {
          * Register events
          */
         addProductListeners: function addProductListeners() {
+            var self = this;
+
             this.prepareMulberryProduct();
 
             this.element.on('updateMulberryProduct', function (evt, newPrice) {
                 this.updateMulberryProduct(newPrice);
             }.bind(this));
 
-            this.element.on('toggleWarranty', (evt, params) => {
-                this.toggleWarranty(params.data, params.isSelected);
+            this.element.on('toggleWarranty', function (evt, params) {
+                self.toggleWarranty(params.data, params.isSelected);
             });
         },
 
@@ -44,7 +46,7 @@ jQuery(document).ready(function () {
                 await window.mulberry.modal.init({
                     offers,
                     settings,
-                    onWarrantySelect: (warranty) => {
+                    onWarrantySelect: function(warranty) {
                         self.toggleMulberryWarranty(warranty, true);
 
                         window.mulberry.modal.close();
@@ -61,7 +63,7 @@ jQuery(document).ready(function () {
                          */
                         jQuery('#warranty').val('');
                     },
-                    onWarrantyDecline: () => {
+                    onWarrantyDecline: function() {
                         window.mulberry.modal.close();
                         self.mulberryOverlayActive = true;
 
@@ -70,6 +72,17 @@ jQuery(document).ready(function () {
                         }
 
                         self.mulberryOverlayActive = false;
+                    }
+                });
+            }
+
+            if (settings.has_inline) {
+                await window.mulberry.inline.init({
+                    offers: offers,
+                    settings: settings,
+                    selector: '.mulberry-inline-container',
+                    onWarrantyToggle: function(warranty) {
+                        self.toggleWarranty(warranty.offer, warranty.isSelected);
                     }
                 });
             }
