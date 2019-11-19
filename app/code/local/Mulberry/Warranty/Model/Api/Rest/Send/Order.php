@@ -159,7 +159,7 @@ class Mulberry_Warranty_Model_Api_Rest_Send_Order
 
         for ($i = 0; $i < (int) $item->getQtyOrdered(); $i++) {
             $this->warrantyItemsPayload[] = array(
-                'product_id' => $item->getId(),
+                'product_id' => $item->getSku(),
                 'product_price' => $item->getPrice(),
                 'product_title' => $item->getName(),
                 'warranty_hash' => $warrantyProductData['warranty_hash'],

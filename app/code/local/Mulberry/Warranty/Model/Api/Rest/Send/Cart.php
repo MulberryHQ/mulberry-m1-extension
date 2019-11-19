@@ -136,7 +136,7 @@ class Mulberry_Warranty_Model_Api_Rest_Send_Cart
     {
         for ($i = 0; $i < (int) $item->getQtyOrdered(); $i++) {
             $this->itemsPayload[] = array(
-                'product_id' => $item->getId(),
+                'product_id' => $item->getSku(),
                 'product_price' => $item->getPrice(),
                 'product_title' => $item->getName(),
             );

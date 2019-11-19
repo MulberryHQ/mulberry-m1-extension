@@ -46,8 +46,8 @@ class Mulberry_Warranty_Model_Api_Rest_Cancel_Order
      * Send order cancellation payload to Mulberry system
      *
      * @param Mage_Sales_Model_Order $order
-     *
-     * @return mixed
+     * @return array
+     * @throws Zend_Date_Exception
      */
     public function cancelOrder(Mage_Sales_Model_Order $order)
     {
@@ -85,6 +85,7 @@ class Mulberry_Warranty_Model_Api_Rest_Cancel_Order
      * Prepare full payload to be sent, when Magento order is cancelled
      *
      * @return array
+     * @throws Zend_Date_Exception
      */
     private function getOrderCancellationPayload()
     {
@@ -92,6 +93,7 @@ class Mulberry_Warranty_Model_Api_Rest_Cancel_Order
 
         $payload = array(
             'cancelled_date' => $date->toString('Y-m-d'),
+            'order_id' => $this->order->getIncrementId(),
             'line_items' => $this->warrantyItemsPayload,
         );
 
@@ -105,12 +107,9 @@ class Mulberry_Warranty_Model_Api_Rest_Cancel_Order
      */
     private function prepareItemPayload(Mage_Sales_Model_Order_Item $item)
     {
-        $warrantyProductData = $item->getBuyRequest()->getWarrantyProduct();
-
         for ($i = 0; $i < (int) $item->getQtyCanceled(); $i++) {
             $this->warrantyItemsPayload[] = array(
-                'order_id' => $item->getOrder()->getIncrementId(),
-                'warranty_hash' => $warrantyProductData['warranty_hash'],
+                'product_id' => $item->getSku(),
             );
         }
     }
