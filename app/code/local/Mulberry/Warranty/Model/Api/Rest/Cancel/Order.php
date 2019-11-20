@@ -107,9 +107,11 @@ class Mulberry_Warranty_Model_Api_Rest_Cancel_Order
      */
     private function prepareItemPayload(Mage_Sales_Model_Order_Item $item)
     {
+        $originalProductData = $item->getBuyRequest()->getOriginalProduct();
+
         for ($i = 0; $i < (int) $item->getQtyCanceled(); $i++) {
             $this->warrantyItemsPayload[] = array(
-                'product_id' => $item->getSku(),
+                'product_id' => $originalProductData['product_sku'],
             );
         }
     }

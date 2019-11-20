@@ -82,6 +82,7 @@ class Mulberry_Warranty_Helper_Item_Option_Helper extends Mage_Core_Helper_Abstr
 
         return array(
             'product' => $originalProductBuyRequest->getProduct(),
+            'product_sku' => $originalQuoteItem->getSku(),
             'selected_configurable_option' => $originalProductBuyRequest->getSelectedConfigurableOption(),
         );
     }
