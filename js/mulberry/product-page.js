@@ -48,51 +48,53 @@ jQuery(document).ready(function () {
 
             window.mulberry.core.getWarrantyOffer(window.mulberryProductData.product)
                 .then(function (offers) {
-                    var settings = window.mulberry.core.settings;
+                    if (offers.length) {
+                        var settings = window.mulberry.core.settings;
 
-                    if (settings.has_modal) {
-                        window.mulberry.modal.init({
-                            offers,
-                            settings,
-                            onWarrantySelect: function(warranty) {
-                                self.toggleMulberryWarranty(warranty, true);
+                        if (settings.has_modal) {
+                            window.mulberry.modal.init({
+                                offers,
+                                settings,
+                                onWarrantySelect: function(warranty) {
+                                    self.toggleMulberryWarranty(warranty, true);
 
-                                window.mulberry.modal.close();
-                                self.mulberryOverlayActive = true;
+                                    window.mulberry.modal.close();
+                                    self.mulberryOverlayActive = true;
 
-                                if ("undefined" !== typeof productAddToCartForm && productAddToCartForm) {
-                                    productAddToCartForm.submit();
+                                    if ("undefined" !== typeof productAddToCartForm && productAddToCartForm) {
+                                        productAddToCartForm.submit();
+                                    }
+
+                                    self.mulberryOverlayActive = false;
+
+                                    /**
+                                     * Reset value for warranty element
+                                     */
+                                    jQuery('#warranty').val('');
+                                },
+                                onWarrantyDecline: function() {
+                                    window.mulberry.modal.close();
+                                    self.mulberryOverlayActive = true;
+
+                                    if ("undefined" !== typeof productAddToCartForm && productAddToCartForm) {
+                                        productAddToCartForm.submit();
+                                    }
+
+                                    self.mulberryOverlayActive = false;
                                 }
+                            });
+                        }
 
-                                self.mulberryOverlayActive = false;
-
-                                /**
-                                 * Reset value for warranty element
-                                 */
-                                jQuery('#warranty').val('');
-                            },
-                            onWarrantyDecline: function() {
-                                window.mulberry.modal.close();
-                                self.mulberryOverlayActive = true;
-
-                                if ("undefined" !== typeof productAddToCartForm && productAddToCartForm) {
-                                    productAddToCartForm.submit();
+                        if (settings.has_inline) {
+                            window.mulberry.inline.init({
+                                offers: offers,
+                                settings: settings,
+                                selector: '.mulberry-inline-container',
+                                onWarrantyToggle: function(warranty) {
+                                    self.toggleWarranty(warranty.offer, warranty.isSelected);
                                 }
-
-                                self.mulberryOverlayActive = false;
-                            }
-                        });
-                    }
-
-                    if (settings.has_inline) {
-                        window.mulberry.inline.init({
-                            offers: offers,
-                            settings: settings,
-                            selector: '.mulberry-inline-container',
-                            onWarrantyToggle: function(warranty) {
-                                self.toggleWarranty(warranty.offer, warranty.isSelected);
-                            }
-                        });
+                            });
+                        }
                     }
                 });
         },
