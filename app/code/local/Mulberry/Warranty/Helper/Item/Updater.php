@@ -37,8 +37,8 @@ class Mulberry_Warranty_Helper_Item_Updater extends Mage_Core_Helper_Abstract
         if ($warrantyOptions = $itemOptionHelper->getWarrantyOption($quoteItem)) {
             $optionsInformation = $warrantyOptions->getData();
 
-            if (isset($optionsInformation['warranty_product']['name'])) {
-                $quoteItem->setName($optionsInformation['warranty_product']['name']);
+            if (isset($optionsInformation['original_product']['product_name'])) {
+                $quoteItem->setName($optionsInformation['original_product']['product_name']);
             }
         }
 
