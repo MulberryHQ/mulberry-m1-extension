@@ -1,10 +1,10 @@
 <?php
 /**
  * @category Mulberry
- * @package Mulberry\Warranty
+ * @package Mulberry_Warranty
  * @author Mulberry <support@getmulberry.com>
  * @version 1.0.0
- * @copyright Copyright (c) 2018 Mulberry Technology Inc., Ltd (http://www.getmulberry.com)
+ * @copyright Copyright (c) 2021 Mulberry Technology Inc., Ltd (http://www.getmulberry.com)
  * @license http://opensource.org/licenses/OSL-3.0 The Open Software License 3.0 (OSL-3.0)
  */
 
@@ -56,12 +56,14 @@ class Mulberry_Warranty_Model_Api_Rest_Send_Cart
             return array();
         }
 
+        $emulationModel = Mage::getSingleton('core/app_emulation');
         $this->order = $order;
         $this->prepareItemsPayload();
 
         $payload = $this->getOrderPayload();
-
+        $initialEnvironmentInfo = $emulationModel->startEnvironmentEmulation($this->order->getStoreId());
         $response = $this->service->makeRequest(self::ORDER_SEND_ENDPOINT_URL, $payload, Zend_Http_Client::POST);
+        $emulationModel->stopEnvironmentEmulation($initialEnvironmentInfo);
 
         return $this->parseResponse($response);
     }
@@ -150,6 +152,9 @@ class Mulberry_Warranty_Model_Api_Rest_Send_Cart
      */
     private function parseResponse($response)
     {
-        return array();
+        return array(
+            'status' => $response['is_successful'] ? 'synced' : 'failed',
+            'response' => $response
+        );
     }
 }

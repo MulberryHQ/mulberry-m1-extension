@@ -1,9 +1,9 @@
 <?php
 /**
  * @category Mulberry
- * @package Mulberry\Warranty
+ * @package Mulberry_Warranty
  * @author Mulberry <support@getmulberry.com>
- * @copyright Copyright (c) 2018 Mulberry Technology Inc., Ltd (http://www.getmulberry.com)
+ * @copyright Copyright (c) 2021 Mulberry Technology Inc., Ltd (http://www.getmulberry.com)
  * @license http://opensource.org/licenses/OSL-3.0 The Open Software License 3.0 (OSL-3.0)
  */
 ?>
@@ -19,30 +19,43 @@
     <?php if ($this->hasOptions()): ?>
         <div class="product-options product-options-mulberry">
             <div class="mulberry-inline-container"></div>
-            <input type="hidden" id="warranty" name="warranty[<?php echo $this->escapeHtml($product->getSku()); ?>]" value=""/>
+            <input type="hidden" id="warranty_hash" name="warranty[hash]" value=""/>
+            <input type="hidden" id="warranty_sku" name="warranty[sku]" value="<?php echo $this->escapeHtml($product->getSku()); ?>"/>
         </div>
     <?php else: ?>
         <div class="product-options-mulberry">
             <div class="mulberry-inline-container"></div>
-            <input type="hidden" id="warranty" name="warranty[<?php echo $this->escapeHtml($product->getSku()); ?>]" value=""/>
+            <input type="hidden" id="warranty_hash" name="warranty[hash]" value=""/>
+            <input type="hidden" id="warranty_sku" name="warranty[sku]" value="<?php echo $this->escapeHtml($product->getSku()); ?>"/>
         </div>
     <?php endif; ?>
 
-    <?php
-    $description = $this->escapeHtml($product->getDescription());
-    $description = preg_replace('/\r|\n/', ' ', $description);
-    ?>
     <script type="text/javascript">
         window.mulberryProductData = {
             product: {
                 id: "<?= $this->escapeHtml($product->getSku()); ?>",
-                title: "<?= $this->escapeHtml($this->quoteEscape($product->getName())); ?>",
+                title: "<?= $this->escapeHtml(htmlspecialchars($product->getName(), ENT_QUOTES | ENT_SUBSTITUTE, null, false)); ?>",
                 price: <?= (float)$product->getFinalPrice(); ?>,
-                description: "<?= $description; ?>"
+                url: "<?= $this->escapeUrl($product->getProductUrl()) ?>",
+                images: <?= $this->getGalleryImagesInfo(); ?>,
+                meta: {
+                    breadcrumbs: <?= $this->getBreadcrumbsInfo(); ?>,
+                },
+                description: "<?= $this->escapeHtml($this->getProductDescription()); ?>"
+            },
+            activeSelection: {
+                id: "<?= $this->escapeHtml($product->getSku()); ?>",
+                title: "<?= $this->escapeHtml(htmlspecialchars($product->getName(), ENT_QUOTES | ENT_SUBSTITUTE, null, false)); ?>",
+                price: <?= (float)$product->getFinalPrice(); ?>,
+                url: "<?= $this->escapeUrl($product->getProductUrl()) ?>",
+                images: <?= $this->getGalleryImagesInfo(); ?>,
+                meta: {
+                    breadcrumbs: <?= $this->getBreadcrumbsInfo(); ?>,
+                },
+                description: "<?= $this->escapeHtml($this->getProductDescription()); ?>"
             },
             originalSku: "<?= $this->escapeHtml($product->getSku()); ?>",
-            originalPrice: <?= (float)$product->getFinalPrice(); ?>,
-            originalDescription: "<?= $description; ?>"
+            originalPrice: <?= (float)$product->getFinalPrice(); ?>
         };
 
         window.mulberryConfigData = {

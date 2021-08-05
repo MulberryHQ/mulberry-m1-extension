@@ -1,9 +1,9 @@
 <?php
 /**
  * @category Mulberry
- * @package Mulberry\Warranty
+ * @package Mulberry_Warranty
  * @author Mulberry <support@getmulberry.com>
- * @copyright Copyright (c) 2018 Mulberry Technology Inc., Ltd (http://www.getmulberry.com)
+ * @copyright Copyright (c) 2021 Mulberry Technology Inc., Ltd (http://www.getmulberry.com)
  * @license http://opensource.org/licenses/OSL-3.0 The Open Software License 3.0 (OSL-3.0)
  */
 
@@ -58,9 +58,12 @@ class Mulberry_Warranty_Model_Api_Rest_Cancel_Order
             return array();
         }
 
-        $payload = $this->getOrderCancellationPayload();
+        $emulationModel = Mage::getModel('core/app_emulation');
 
+        $payload = $this->getOrderCancellationPayload();
+        $emulationModel->startEnvironmentEmulation($this->order->getStoreId(), Mage_Core_Model_App_Area::AREA_FRONTEND, true);
         $response = $this->service->makeRequest(self::ORDER_CANCEL_ENDPOINT_URL, $payload, Zend_Http_Client::POST);
+        $emulationModel->stopEnvironmentEmulation();
 
         return $this->parseResponse($response);
     }

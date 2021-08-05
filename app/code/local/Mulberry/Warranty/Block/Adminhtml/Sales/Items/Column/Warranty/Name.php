@@ -2,10 +2,10 @@
 
 /**
  * @category Mulberry
- * @package Mulberry\Warranty
+ * @package Mulberry_Warranty
  * @author Mulberry <support@getmulberry.com>
  * @version 1.0.0
- * @copyright Copyright (c) 2019 Mulberry Technology Inc., Ltd (http://www.getmulberry.com)
+ * @copyright Copyright (c) 2021 Mulberry Technology Inc., Ltd (http://www.getmulberry.com)
  * @license http://opensource.org/licenses/OSL-3.0 The Open Software License 3.0 (OSL-3.0)
  */
 class Mulberry_Warranty_Block_Adminhtml_Sales_Items_Column_Warranty_Name extends Mage_Adminhtml_Block_Sales_Items_Column_Name

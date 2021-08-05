@@ -11,6 +11,10 @@ jQuery(document).ready(function () {
         productUpdateTimer: null,
         mulberryProductUpdateDelay: 1000,
         mulberryOverlayActive: false,
+        swatchElement: '[data-role=swatch-options]',
+        swatchAttributeElement: 'div.swatch-attribute',
+        warrantyHashElement: '#warranty_hash',
+        warrantySkuElement: '#warranty_sku',
 
         /**
          * Register events
@@ -70,7 +74,7 @@ jQuery(document).ready(function () {
                                     /**
                                      * Reset value for warranty element
                                      */
-                                    jQuery('#warranty').val('');
+                                    jQuery(this.warrantyHashElement).val('');
                                 },
                                 onWarrantyDecline: function() {
                                     window.mulberry.modal.close();
@@ -107,14 +111,15 @@ jQuery(document).ready(function () {
          */
         toggleWarranty: function toggleWarranty(data, isSelected) {
             var selectedWarrantyHash = '',
-                warrantyElement = jQuery('#warranty');
+                warrantyHashElement = jQuery(this.warrantyHashElement),
+                warrantySkuElement = jQuery(this.warrantySkuElement);
 
             if (data) {
                 selectedWarrantyHash = isSelected && data ? data.warranty_hash : '';
             }
 
-            warrantyElement.attr('name', 'warranty[' + window.mulberryProductData.product.id + ']');
-            warrantyElement.val(selectedWarrantyHash);
+            warrantySkuElement.val(window.mulberryProductData.product.id);
+            warrantyHashElement.val(selectedWarrantyHash);
         },
 
         /**
@@ -229,12 +234,12 @@ jQuery(document).ready(function () {
                 sku += customOptionsSku;
             }
 
-            return {
+            var updatedInformation = {
                 id: sku,
-                title: window.mulberryProductData.product.title,
-                price: newPrice ? newPrice : window.mulberryProductData.originalPrice,
-                description: window.mulberryProductData.originalDescription
+                price: newPrice ? newPrice : window.mulberryProductData.originalPrice
             };
+
+            return Object.assign(window.mulberryProductData.product, updatedInformation);
         },
 
         /**
@@ -243,10 +248,10 @@ jQuery(document).ready(function () {
          * @param newPrice
          */
         updateMulberryProduct: function updateMulberryProduct(newPrice) {
-            var newConfig = this.prepareMulberryProduct(newPrice),
-                settings = window.mulberry.core.settings;
+            this.prepareMulberryProduct(newPrice);
+            var settings = window.mulberry.core.settings;
 
-            if (!window.mulberry || !settings.has_inline) {
+            if (!window.mulberry || !settings || (!settings.has_modal && !settings.has_inline)) {
                 return;
             }
 
@@ -258,28 +263,39 @@ jQuery(document).ready(function () {
             clearTimeout(this.productUpdateTimer);
             this.productUpdateTimer = setTimeout(
                 function () {
-                    if (this.hasConfigurationChanges(newConfig)) {
-                        window.mulberryProductData.product = newConfig;
-                        jQuery("#warranty").attr(
-                            "name",
-                            "warranty[" + window.mulberryProductData.product.id + "]"
-                        );
+                    if (this.hasConfigurationChanges()) {
+                        window.mulberry.core.getWarrantyOffer(window.mulberryProductData.activeSelection).then(function (offers) {
+                            var settings = window.mulberry.core.settings;
 
-                        window.mulberry.core.getWarrantyOffer(window.mulberryProductData.product);
+                            if (settings.has_modal) {
+                                window.mulberry.modal.updateOffer(window.mulberry.core.offers);
+                            }
+
+                            if (settings.has_inline) {
+                                window.mulberry.inline.updateOffer(window.mulberry.core.offers);
+                            }
+                        });
+
+                        jQuery(this.warrantySkuElement).val(window.mulberryProductData.activeSelection.id);
                     }
-                }.bind(this),
-                this.mulberryProductUpdateDelay
-            );
+                }.bind(this), this.mulberryProductUpdateDelay);
         },
 
         /**
          * Check, if product has configuration changes and we need to trigger Mulberry product update
          *
-         * @param newConfig
          * @returns {boolean}
          */
-        hasConfigurationChanges: function hasConfigurationChanges(newConfig) {
-            var currentConfig = window.mulberryProductData.product;
+        hasConfigurationChanges: function hasConfigurationChanges() {
+            /**
+             * Make a copy of the new object rather than variable assignment,
+             * this is required to avoid the issue when the currentConfig is updated along with the newConfig value
+             * @type {any}
+             */
+            var newConfig = JSON.parse(JSON.stringify(window.mulberryProductData.product));
+            var currentConfig = window.mulberryProductData.activeSelection;
+
+            window.mulberryProductData.activeSelection = newConfig;
 
             return !this.isEqual(currentConfig, newConfig);
         },
@@ -373,7 +389,7 @@ jQuery(document).ready(function () {
 
                 // If an object or array, compare recursively
                 if (["[object Array]", "[object Object]"].indexOf(itemType) >= 0) {
-                    if (!isEqual(item1, item2)) return false;
+                    if (!MulberryProductPage.isEqual(item1, item2)) return false;
                 }
 
                 // Otherwise, do a simple comparison
@@ -492,7 +508,7 @@ jQuery(document).ready(function () {
 
                             if (
                                 !self.mulberryOverlayActive &&
-                                jQuery("#warranty").val() === ""
+                                jQuery(self.warrantyHashElement).val() === ""
                             ) {
                                 window.mulberry.modal.open();
                             } else {

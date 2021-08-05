@@ -1,10 +1,10 @@
 <?php
 /**
  * @category Mulberry
- * @package Mulberry\Warranty
+ * @package Mulberry_Warranty
  * @author Mulberry <support@getmulberry.com>
  * @version 1.0.0
- * @copyright Copyright (c) 2018 Mulberry Technology Inc., Ltd (http://www.getmulberry.com)
+ * @copyright Copyright (c) 2021 Mulberry Technology Inc., Ltd (http://www.getmulberry.com)
  * @license http://opensource.org/licenses/OSL-3.0 The Open Software License 3.0 (OSL-3.0)
  */
 
@@ -38,7 +38,8 @@ class Mulberry_Warranty_Helper_Item_Updater extends Mage_Core_Helper_Abstract
             $optionsInformation = $warrantyOptions->getData();
 
             if (isset($optionsInformation['original_product']['product_name'])) {
-                $quoteItem->setName($optionsInformation['original_product']['product_name']);
+                $itemName = sprintf('Warranty - %s', $optionsInformation['original_product']['product_name']);
+                $quoteItem->setName($itemName);
             }
         }
 

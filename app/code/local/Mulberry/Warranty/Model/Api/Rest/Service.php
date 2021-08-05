@@ -1,10 +1,10 @@
 <?php
 /**
  * @category Mulberry
- * @package Mulberry\Warranty
+ * @package Mulberry_Warranty
  * @author Mulberry <support@getmulberry.com>
  * @version 1.0.0
- * @copyright Copyright (c) 2018 Mulberry Technology Inc., Ltd (http://www.getmulberry.com)
+ * @copyright Copyright (c) 2021 Mulberry Technology Inc., Ltd (http://www.getmulberry.com)
  * @license http://opensource.org/licenses/OSL-3.0 The Open Software License 3.0 (OSL-3.0)
  */
 
@@ -52,6 +52,7 @@ class Mulberry_Warranty_Model_Api_Rest_Service
             $curl = new Varien_Http_Adapter_Curl();
             $curl->setConfig(array(
                 'timeout'   => 5,
+                'connect_timeout' => 5
             ));
 
             $curl->write($method, $this->uri . $url, '1.1', $this->headers, Mage::helper('core')->jsonEncode($body));

@@ -3,23 +3,32 @@
 /**
  * @category Mulberry
  * @version 1.0.0
- * @package Mulberry\Warranty
+ * @package Mulberry_Warranty
  * @author Mulberry <support@getmulberry.com>
- * @copyright Copyright (c) 2018 Mulberry Technology Inc., Ltd (http://www.getmulberry.com)
+ * @copyright Copyright (c) 2021 Mulberry Technology Inc., Ltd (http://www.getmulberry.com)
  * @license http://opensource.org/licenses/OSL-3.0 The Open Software License 3.0 (OSL-3.0)
  */
 -->
 <config>
     <modules>
         <Mulberry_Warranty>
-            <version>1.1.0</version>
+            <version>1.2.0</version>
         </Mulberry_Warranty>
     </modules>
     <global>
         <models>
             <mulberry_warranty>
                 <class>Mulberry_Warranty_Model</class>
+                <resourceModel>mulberry_warranty_resource</resourceModel>
             </mulberry_warranty>
+            <mulberry_warranty_resource>
+                <class>Mulberry_Warranty_Model_Resource</class>
+                <entities>
+                    <queue>
+                        <table>mulberry_warranty_queue</table>
+                    </queue>
+                </entities>
+            </mulberry_warranty_resource>
         </models>
         <blocks>
             <adminhtml>
@@ -83,18 +92,42 @@
             </sales_order_place_before>
             <checkout_submit_all_after>
                 <observers>
-                    <mulberry_send_order>
+                    <add_to_queue>
+                        <class>mulberry_warranty/observer_api</class>
+                        <method>addToQueue</method>
+                    </add_to_queue>
+                    <!--<mulberry_send_order>
                         <class>mulberry_warranty/observer_api</class>
                         <method>sendOrder</method>
                     </mulberry_send_order>
                     <mulberry_send_cart>
                         <class>mulberry_warranty/observer_api</class>
                         <method>sendCart</method>
-                    </mulberry_send_cart>
+                    </mulberry_send_cart>-->
                 </observers>
             </checkout_submit_all_after>
         </events>
     </global>
+    <crontab>
+        <jobs>
+            <mulberry_warranty_send_order>
+                <schedule>
+                    <cron_expr>5 * * * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>mulberry_warranty/cron::sendOrder</model>
+                </run>
+            </mulberry_warranty_send_order>
+            <mulberry_warranty_send_cart>
+                <schedule>
+                    <cron_expr>5 * * * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>mulberry_warranty/cron::sendCart</model>
+                </run>
+            </mulberry_warranty_send_cart>
+        </jobs>
+    </crontab>
     <frontend>
         <routers>
             <mulberry_warranty>
@@ -133,6 +166,17 @@
             </sales_quote_item_set_product>
         </events>
     </frontend>
+    <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <mulberry_warranty before="Mage_Adminhtml">Mulberry_Warranty_Adminhtml</mulberry_warranty>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
     <adminhtml>
         <layout>
             <updates>

@@ -1,9 +1,9 @@
 <?php
 /**
  * @category Mulberry
- * @package Mulberry\Warranty
+ * @package Mulberry_Warranty
  * @author Mulberry <support@getmulberry.com>
- * @copyright Copyright (c) 2018 Mulberry Technology Inc., Ltd (http://www.getmulberry.com)
+ * @copyright Copyright (c) 2021 Mulberry Technology Inc., Ltd (http://www.getmulberry.com)
  * @license http://opensource.org/licenses/OSL-3.0 The Open Software License 3.0 (OSL-3.0)
  */
 
@@ -16,6 +16,9 @@ class Mulberry_Warranty_Model_Observer
      */
     public function addWarrantyProduct(Varien_Event_Observer $observer)
     {
+        $originalProduct = $observer->getEvent()->getProduct();
+        $warrantyProduct = null;
+
         try {
             /**
              * Add warranty products equal to the amount of original product added to cart.
@@ -26,27 +29,27 @@ class Mulberry_Warranty_Model_Observer
                  * @var Mage_Sales_Model_Quote $quote
                  * @var Mage_Sales_Model_Quote_Item $originalQuoteItem
                  */
-                $originalProduct = $observer->getEvent()->getProduct();
                 $originalQuoteItem = $observer->getEvent()->getQuoteItem();
                 $params = Mage::app()->getRequest()->getParams();
                 $quote = $originalQuoteItem->getQuote();
                 $warrantyProductsToAdd = isset($params['qty']) ? $params['qty'] : 1;
 
                 if (array_key_exists('warranty', $params)) {
+                    $warrantySku = $params['warranty']['sku'];
+                    $isValidWarrantyHash = false;
+
                     /**
                      * Check whether we need to add warranty for this product or not
                      */
-                    if (isset($params['warranty'][$this->getSelectedProductSku($originalProduct)])
-                        && !empty($params['warranty'][$this->getSelectedProductSku($originalProduct)])) {
-                        $warrantyHash = $params['warranty'][$this->getSelectedProductSku($originalProduct)];
-                    } else {
-                        $warrantyHash = false;
+                    if (isset($params['warranty']['hash']) && !empty($params['warranty']['hash']) && $warrantySku === $this->getSelectedProductSku($originalProduct)) {
+                        $isValidWarrantyHash = true;
                     }
 
                     /**
                      * Process additional warranty product add-to-cart
                      */
-                    if ($originalProduct && $originalProduct->getId() && $warrantyHash) {
+                    if ($originalProduct && $originalProduct->getId() && $isValidWarrantyHash) {
+                        $warrantyHash = $params['warranty']['hash'];
                         $itemOptionHelper = Mage::helper('mulberry_warranty/item_option_helper');
                         $warrantyItemUpdater = Mage::helper('mulberry_warranty/item_updater');
 
@@ -81,7 +84,20 @@ class Mulberry_Warranty_Model_Observer
                 }
             }
         } catch (Mage_Core_Exception $e) {
-            $this->_getSession()->addError($e->getMessage());
+            if ($warrantyProduct !== null && $warrantyProduct->getId()) {
+                $this->_getSession()->addError(
+                    Mage::helper('mulberry_warranty')->__('We were not able to add the %1 to cart, but we did add the %2 to cart',
+                        $warrantyProduct->getName(),
+                        $originalProduct->getName()
+                    )
+                );
+            } else {
+                $this->_getSession()->addError(
+                    Mage::helper('mulberry_warranty')->__('We were not able to add the warranty product to cart, but we did add the %1 to cart',
+                        $originalProduct->getName()
+                    )
+                );
+            }
         }
     }
 

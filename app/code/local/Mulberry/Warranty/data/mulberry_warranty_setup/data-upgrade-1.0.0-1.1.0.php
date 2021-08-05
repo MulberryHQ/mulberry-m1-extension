@@ -1,9 +1,9 @@
 <?php
 /**
  * @category Mulberry
- * @package Mulberry\Warranty
+ * @package Mulberry_Warranty
  * @author Mulberry <support@getmulberry.com>
- * @copyright Copyright (c) 2018 Mulberry Technology Inc., Ltd (http://www.getmulberry.com)
+ * @copyright Copyright (c) 2021 Mulberry Technology Inc., Ltd (http://www.getmulberry.com)
  * @license http://opensource.org/licenses/OSL-3.0 The Open Software License 3.0 (OSL-3.0)
  */
 /* @var $this Mage_Eav_Model_Entity_Setup */
@@ -11,6 +11,7 @@
 class Mulberry_Warranty_Product_Placeholder_Setup
 {
     private $warrantyProductSkus = array(
+        'mulberry-warranty-12-months' => 'Mulberry Warranty Product - 12 Months',
         'mulberry-warranty-24-months' => 'Mulberry Warranty Product - 24 Months',
         'mulberry-warranty-36-months' => 'Mulberry Warranty Product - 36 Months',
         'mulberry-warranty-48-months' => 'Mulberry Warranty Product - 48 Months',
