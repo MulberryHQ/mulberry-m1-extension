@@ -75,8 +75,10 @@ class Mulberry_Warranty_Model_Cron
      */
     private function joinQueueToOrderCollection($collection)
     {
+        $queueTableName = Mage::getSingleton('core/resource')->getTableName('mulberry_warranty/queue');
+
         $collection->getSelect()->joinLeft(
-            array('mwq' => 'mulberry_warranty_queue'),
+            array('mwq' => $queueTableName),
             'main_table.entity_id = mwq.order_id',
             array('action_type', 'sync_status', 'sync_date')
         );
