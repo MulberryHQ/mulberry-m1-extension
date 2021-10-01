@@ -1,6 +1,9 @@
 Mulberry_Warranty changelog
 ========================
 
+1.2.4:
+- Use order increment_id instead of order_identifier in send cart hook
+
 1.2.3:
 - Updated Mulberry Warranty API to the latest state
 - Added queue functionality for the API webhooks aka send cart/send order
