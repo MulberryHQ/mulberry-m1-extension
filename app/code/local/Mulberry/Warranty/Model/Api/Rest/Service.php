@@ -109,8 +109,12 @@ class Mulberry_Warranty_Model_Api_Rest_Service
         }
 
         $data['response_object'] = array(
+            'headers' => $response->getHeaders(),
             'response' => $response,
         );
+
+        $data['response_status_code'] = $response->getStatusCode();
+        $data['response_status_message'] = $response->getReasonPhrase();
 
         return $data;
     }

@@ -36,21 +36,6 @@ class Mulberry_Warranty_Model_Api_Rest_Send_Order
     private $order;
 
     /**
-     * Data mapping for warranty attributes,
-     * stored as follows:
-     * Magento additional information key => ['Mulberry API key']
-     *
-     * @var array $warrantyAttributesMapping
-     */
-    protected $warrantyAttributesMapping = array(
-        'warranty_price' => array('cost'),
-        'service_type' => array('service_type'),
-        'warranty_hash' => array('warranty_hash'),
-        'duration_months' => array('duration_months'),
-        'product_name' => array('product', 'name'),
-    );
-
-    /**
      * Mulberry_Warranty_Model_Api_Rest_Send_Order constructor.
      */
     public function __construct()

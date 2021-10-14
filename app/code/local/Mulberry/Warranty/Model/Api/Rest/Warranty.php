@@ -32,6 +32,7 @@ class Mulberry_Warranty_Model_Api_Rest_Warranty
         'service_type' => array('service_type'),
         'warranty_hash' => array('warranty_hash'),
         'duration_months' => array('duration_months'),
+        'warranty_offer_id' => array('warranty_offer_id'),
     );
 
     /**
@@ -77,6 +78,7 @@ class Mulberry_Warranty_Model_Api_Rest_Warranty
                 'warranty_price' => (float) $warrantyProduct['cost'],
                 'service_type' => $warrantyProduct['service_type'],
                 'warranty_hash' => $warrantyProduct['warranty_hash'],
+                'warranty_offer_id' => $warrantyProduct['warranty_offer_id'],
                 'duration_months' => $warrantyProduct['duration_months'],
             );
         }
