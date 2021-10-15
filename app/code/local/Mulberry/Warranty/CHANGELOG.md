@@ -1,6 +1,9 @@
 Mulberry_Warranty changelog
 ========================
 
+1.2.5:
+- Added "warranty_offer_id" to the corresponding payloads
+
 1.2.4:
 - Use order increment_id instead of order_identifier in send cart hook
 

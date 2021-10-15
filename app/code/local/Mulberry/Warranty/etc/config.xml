@@ -12,7 +12,7 @@
 <config>
     <modules>
         <Mulberry_Warranty>
-            <version>1.2.4</version>
+            <version>1.2.5</version>
         </Mulberry_Warranty>
     </modules>
     <global>
