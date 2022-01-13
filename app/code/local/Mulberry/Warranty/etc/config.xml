@@ -12,7 +12,7 @@
 <config>
     <modules>
         <Mulberry_Warranty>
-            <version>1.2.5</version>
+            <version>1.3.0</version>
         </Mulberry_Warranty>
     </modules>
     <global>
@@ -96,14 +96,6 @@
                         <class>mulberry_warranty/observer_api</class>
                         <method>addToQueue</method>
                     </add_to_queue>
-                    <!--<mulberry_send_order>
-                        <class>mulberry_warranty/observer_api</class>
-                        <method>sendOrder</method>
-                    </mulberry_send_order>
-                    <mulberry_send_cart>
-                        <class>mulberry_warranty/observer_api</class>
-                        <method>sendCart</method>
-                    </mulberry_send_cart>-->
                 </observers>
             </checkout_submit_all_after>
         </events>
@@ -194,7 +186,7 @@
                 <partner_url>https://partner-staging.getmulberry.com</partner_url>
                 <platform_domain></platform_domain>
                 <retailer_id></retailer_id>
-                <api_token></api_token>
+                <private_token></private_token>
                 <send_cart_data>1</send_cart_data>
             </general>
         </mulberry_warranty>

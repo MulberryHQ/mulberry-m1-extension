@@ -144,7 +144,6 @@ class Mulberry_Warranty_Model_Api_Rest_Send_Order
     private function prepareItemPayload(Mage_Sales_Model_Order_Item $item)
     {
         $warrantyProductData = $item->getBuyRequest()->getWarrantyProduct();
-        $originalProductData = $item->getBuyRequest()->getOriginalProduct();
 
         for ($i = 0; $i < (int) $item->getQtyOrdered(); $i++) {
             $this->warrantyItemsPayload[] = array(

@@ -29,6 +29,19 @@ class Mulberry_Warranty_Helper_Item_Updater extends Mage_Core_Helper_Abstract
      */
     public function updateWarrantyProductName(Mage_Sales_Model_Quote_Item $quoteItem)
     {
+        if ($itemName = $this->prepareWarrantyProductName($quoteItem)) {
+            $quoteItem->setName($itemName);
+        }
+
+        return $quoteItem;
+    }
+
+    /**
+     * @param Mage_Sales_Model_Quote_Item $quoteItem
+     * @return false|string
+     */
+    public function prepareWarrantyProductName(Mage_Sales_Model_Quote_Item $quoteItem)
+    {
         /**
          * @var $itemOptionHelper Mulberry_Warranty_Helper_Item_Option_Helper
          */
@@ -38,12 +51,11 @@ class Mulberry_Warranty_Helper_Item_Updater extends Mage_Core_Helper_Abstract
             $optionsInformation = $warrantyOptions->getData();
 
             if (isset($optionsInformation['original_product']['product_name'])) {
-                $itemName = sprintf('Warranty - %s', $optionsInformation['original_product']['product_name']);
-                $quoteItem->setName($itemName);
+                return sprintf('Warranty - %s', $optionsInformation['original_product']['product_name']);
             }
         }
 
-        return $quoteItem;
+        return false;
     }
 
     /**

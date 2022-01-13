@@ -20,12 +20,12 @@ A merchant (admin user) can configure the following fields in Magento admin, whi
     - Sets base URL used for API requests (e.g. `https://www.getmulberry.com`).
 - **Mulberry Partner Base URL**
     - Sets the Mulberry Partner URL. This URL is used to perform backend API requests as well as to initialize the iframe on the Product Details Page (PDP). e.g `partner.getmulberry.com`.
-- **Platform Domain Name**
-    - Sets the merchant's domain name. If no value is set, the global value of `$_SERVER['SERVER_NAME']` is used.
 - **Mulberry Retailer ID**
     - Sets the retailer ID generated in the Mulberry system.
-- **API Token**
-    - Sets the Mulberry API Token for merchant authorization, when requesting warranty product information on the PDP.
+- **Private Token**
+    - Sets the Mulberry Private Token for merchant authorization, when sending API calls through the backend.
+- **Public Token**
+  - Sets the Mulberry Public Token for merchant authorization, when requesting warranty product information on the PDP.
 - **Enable Post Purchase**
     - Enables/disables the Mulberry "Post Purchase" hook.
 
@@ -48,7 +48,7 @@ To set a custom image for a warranty product, use the [default Magento product i
 
 **IMPORTANT!!!**
 
-Please do **not** modify the SKU of the placeholder product. Otherwise the system won't be able to recognize and add a warranty product for an original Magento product.
+Please do **not** modify the SKU of the placeholder product. Otherwise the system won't be able to recognize and add a warranty product for the original Magento product.
 
 ## Technical Documentation
 
@@ -58,6 +58,10 @@ As soon as the DOM is fully loaded on the Product Details Page, the Mulberry ifr
 ### Magento event observers
 
 In order to add a warranty product to the cart, as well as process it during the customer journey, the Mulberry module listens to the following Magento event observers:
+
+- `order_cancel_after` On this event, the module checks if there's any warranty product available on the order. If so, it sends Mulberry cancel API request.
+
+- `sales_order_place_before` On this event, we generate the unique order identifier aka UUID (available by default in Magento 2, but was not there for Magento 1)
 
 - `checkout_cart_product_add_after` On this event, the module checks if the warranty product's hash has been passed as a form request. If so, a Magento warranty product placeholder is loaded using its SKU. Next, a REST API request is made to retrieve the warranty product's information (e.g. name, price, service_type, etc.). All of this data is stored under `warranty_information` of the particular quote item within the `quote_item_option` table.
 

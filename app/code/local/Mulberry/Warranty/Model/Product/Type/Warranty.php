@@ -45,4 +45,34 @@ class Mulberry_Warranty_Model_Product_Type_Warranty extends Mage_Catalog_Model_P
     {
         return true;
     }
+
+    /**
+     * Retrieve message for specify option(s)
+     *
+     * @return string
+     */
+    public function getMissingAssociatedProductMessage()
+    {
+        return Mage::helper('mulberry_warranty')->__('A warranty product does not have the associated product.');
+    }
+
+    protected function _prepareProduct(Varien_Object $buyRequest, $product, $processMode)
+    {
+        $result = parent::_prepareProduct($buyRequest, $product, $processMode);
+
+        if (!$this->warrantyHasAssociatedProduct($buyRequest)) {
+            return $this->getMissingAssociatedProductMessage();
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param $buyRequest
+     * @return bool
+     */
+    protected function warrantyHasAssociatedProduct($buyRequest)
+    {
+        return $buyRequest->getWarrantyProduct() && $buyRequest->getOriginalProduct();
+    }
 }

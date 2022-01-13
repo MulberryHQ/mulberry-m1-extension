@@ -31,6 +31,16 @@ class Mulberry_Warranty_Model_Api_Rest_Send_Cart
     private $order;
 
     /**
+     * @var array
+     */
+    private $warrantyItems;
+
+    /**
+     * @var array
+     */
+    private $orderItems;
+
+    /**
      * Mulberry_Warranty_Model_Api_Rest_Send_Order constructor.
      */
     public function __construct()
@@ -60,6 +70,20 @@ class Mulberry_Warranty_Model_Api_Rest_Send_Cart
         $this->order = $order;
         $this->prepareItemsPayload();
 
+        /**
+         * If there are no items to send, create dummy response and mark order as "synced"
+         */
+        if (empty($this->itemsPayload)) {
+            $response = [
+                'is_successful' => true,
+                'response' => [
+                    'message' => 'No items available to export',
+                ],
+            ];
+
+            return $this->parseResponse($response);
+        }
+
         $payload = $this->getOrderPayload();
         $initialEnvironmentInfo = $emulationModel->startEnvironmentEmulation($this->order->getStoreId());
         $response = $this->service->makeRequest(self::ORDER_SEND_ENDPOINT_URL, $payload, Zend_Http_Client::POST);
@@ -73,19 +97,83 @@ class Mulberry_Warranty_Model_Api_Rest_Send_Cart
      */
     private function prepareItemsPayload()
     {
+        foreach ($this->order->getAllVisibleItems() as $item) {
+            if ($item->getProductType() === Mulberry_Warranty_Model_Product_Type_Warranty::TYPE_ID) {
+                $this->warrantyItems[] = [
+                    'item' => $item,
+                    'quantity' => (int) $item->getQtyOrdered(),
+                ];
+            } else {
+                $this->orderItems[] = [
+                    'item' => $item,
+                    'quantity' => (int) $item->getQtyOrdered(),
+                ];
+            }
+        }
+
         /**
+         * Send only order items without the associated warranty item
+         *
          * @var $item Mage_Sales_Model_Order_Item
          */
-        foreach ($this->order->getAllVisibleItems() as $item) {
-            /**
-             * We don't need to send warranty products as a payload
-             */
-            if ($item->getProductType() === Mulberry_Warranty_Model_Product_Type_Warranty::TYPE_ID) {
-                continue;
-            }
+        foreach ($this->orderItems as $key => $itemDataArray) {
+            $item = $itemDataArray['item'];
 
-            $this->prepareItemPayload($item);
+            for ($i = 0; $i < (int) $item->getQtyOrdered(); $i++) {
+                if (!$this->isPostPurchaseEligible($itemDataArray, $key)) {
+                    continue;
+                }
+
+                /**
+                 * Add item for the post purchase payload
+                 */
+                $this->itemsPayload[] = $this->prepareItemPayload($item);
+            }
         }
+    }
+
+    /**
+     * Check if the item is eligible for the post purchase.
+     *
+     * @param array $itemDataArray
+     * @param $key
+     * @return bool
+     */
+    private function isPostPurchaseEligible(array $itemDataArray, $key)
+    {
+        $item = $itemDataArray['item'];
+
+        /**
+         * Exclude the warranty products from the payload
+         */
+        if ($item->getProductType() === Mulberry_Warranty_Model_Product_Type_Warranty::TYPE_ID) {
+            return false;
+        }
+
+        /**
+         * Exclude order items with the warranty purchased
+         *
+         * @var Mage_Sales_Model_Order_Item $warrantyItem
+         */
+        foreach ($this->warrantyItems as $key => $warrantyItemArray) {
+            $warrantyItem = $warrantyItemArray['item'];
+            $associatedProduct = $warrantyItem->getBuyRequest()->getOriginalProduct();
+            $associatedSku = $associatedProduct['product_sku'];
+
+            if ($item->getSku() === $associatedSku) {
+                $warrantyItemArray['quantity'] = (int) $warrantyItemArray['quantity'] - 1;
+
+                if ((int) $warrantyItemArray['quantity'] < 1) {
+                    unset($this->warrantyItems[$key]);
+                }
+
+                $this->orderItems[$key]['quantity'] = (int) $this->orderItems[$key]['quantity'] - 1;
+
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**
@@ -133,16 +221,19 @@ class Mulberry_Warranty_Model_Api_Rest_Send_Cart
      * payload should contain separate object for each item purchased (no qty support in API at the moment)
      *
      * @param Mage_Sales_Model_Order_Item $item
+     * @return array
      */
     private function prepareItemPayload(Mage_Sales_Model_Order_Item $item)
     {
-        for ($i = 0; $i < (int) $item->getQtyOrdered(); $i++) {
-            $this->itemsPayload[] = array(
-                'product_id' => $item->getSku(),
-                'product_price' => $item->getPrice(),
-                'product_title' => $item->getName(),
-            );
-        }
+        return array(
+            'product_id' => $item->getSku(),
+            'product_price' => $item->getPrice(),
+            'product_title' => $item->getName(),
+            'meta' => [
+                'breadcrumbs' => Mage::helper('mulberry_warranty/product')->getProductBreadcrumbs($item->getProduct()),
+            ],
+            'images' => Mage::helper('mulberry_warranty/product')->getGalleryImagesInfo($item->getProduct()),
+        );
     }
 
     /**

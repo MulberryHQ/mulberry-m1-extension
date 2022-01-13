@@ -62,9 +62,9 @@
                             <label>Mulberry API URL</label>
                             <frontend_type>text</frontend_type>
                             <comment><![CDATA[
-                            API URL used for Mulberry requests,
-                            - Staging value example: https://staging.getmulberry.com
-                            - Production value: TBD ]]></comment>
+                            API URL used for Mulberry requests, <br />
+                                <b>Sandbox:</b> https://app-staging.getmulberry.com <br />
+                                <b>Production:</b> https://app.getmulberry.com ]]></comment>
                             <sort_order>10</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
@@ -74,9 +74,9 @@
                             <label>Mulberry Partner Base URL</label>
                             <frontend_type>text</frontend_type>
                             <comment><![CDATA[
-                    Mulberry Partner URL used for Mulberry requests,
-                    - Staging value example: https://partner-staging.getmulberry.com
-                    - Production value: TBD ]]></comment>
+                            Mulberry Partner URL used for Mulberry requests, <br />
+                                <b>Sandbox:</b> https://partner-staging.getmulberry.com <br />
+                                <b>Production:</b> https://partner.getmulberry.com ]]></comment>
                             <sort_order>10</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
@@ -85,7 +85,7 @@
                         <platform_domain translate="label comment">
                             <label>Platform Domain Name</label>
                             <frontend_type>text</frontend_type>
-                            <comment><![CDATA[Used for API init, if no value is set, $_SERVER['SERVER_NAME'] is used. ]]></comment>
+                            <comment><![CDATA[Used for API init, if no value is set, $_SERVER['SERVER_NAME'] is used.]]></comment>
                             <sort_order>10</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
@@ -100,17 +100,17 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>0</show_in_store>
                         </retailer_id>
-                        <api_token translate="label comment">
-                            <label>Mulberry API Token</label>
+                        <private_token translate="label comment">
+                            <label>Private Token</label>
                             <frontend_type>text</frontend_type>
-                            <comment><![CDATA[Auth token to be used for API calls.]]></comment>
+                            <comment><![CDATA[Private token to be used for the API calls.]]></comment>
                             <sort_order>10</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>0</show_in_store>
-                        </api_token>
+                        </private_token>
                         <public_token translate="label comment">
-                            <label>Mulberry Public Token</label>
+                            <label>Public Token</label>
                             <frontend_type>text</frontend_type>
                             <comment><![CDATA[Public token to be used for offer init.]]></comment>
                             <sort_order>20</sort_order>

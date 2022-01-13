@@ -88,7 +88,7 @@ class Mulberry_Warranty_Model_Api_Rest_Service
     /**
      * Process the response and return an array
      *
-     * @param $response
+     * @param Zend_Http_Response $response
      *
      * @return array|mixed
      */
@@ -113,8 +113,8 @@ class Mulberry_Warranty_Model_Api_Rest_Service
             'response' => $response,
         );
 
-        $data['response_status_code'] = $response->getStatusCode();
-        $data['response_status_message'] = $response->getReasonPhrase();
+        $data['response_status_code'] = $response->getStatus();
+        $data['response_status_message'] = $response->getMessage();
 
         return $data;
     }
@@ -131,7 +131,7 @@ class Mulberry_Warranty_Model_Api_Rest_Service
             'body' => $request,
         );
 
-        Mage::log(array('REQUEST' => $req, 'action' => $url), Zend_Log::DEBUG);
-        Mage::log(array('RESPONSE' => $response, 'action' => $url), Zend_Log::DEBUG);
+        Mage::log(json_encode(array('REQUEST' => $req, 'action' => $url)), Zend_Log::DEBUG);
+        Mage::log(json_encode(array('RESPONSE' => $response, 'action' => $url)), Zend_Log::DEBUG);
     }
 }

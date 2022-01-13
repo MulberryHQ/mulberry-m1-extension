@@ -79,25 +79,29 @@ class Mulberry_Warranty_Model_Observer
                         /**
                          * Custom price should be set after quote item has been prepared
                          */
+                        if (is_string($warrantyQuoteItem)) {
+                            throw new Mage_Core_Exception(sprintf('%s, request %s', $warrantyQuoteItem, $this->getProductRequest($options)->toJson()));
+                        }
+
                         $warrantyItemUpdater->setCustomWarrantyItemPrice($warrantyQuoteItem, $options);
+
+                        $message = Mage::helper('mulberry_warranty')->__(
+                            '%s was added to your shopping cart.',
+                            $warrantyItemUpdater->prepareWarrantyProductName($warrantyQuoteItem)
+                        );
+
+                        $this->_getSession()->addSuccess($message);
                     }
                 }
             }
         } catch (Mage_Core_Exception $e) {
-            if ($warrantyProduct !== null && $warrantyProduct->getId()) {
-                $this->_getSession()->addError(
-                    Mage::helper('mulberry_warranty')->__('We were not able to add the %1 to cart, but we did add the %2 to cart',
-                        $warrantyProduct->getName(),
-                        $originalProduct->getName()
-                    )
-                );
-            } else {
-                $this->_getSession()->addError(
-                    Mage::helper('mulberry_warranty')->__('We were not able to add the warranty product to cart, but we did add the %1 to cart',
-                        $originalProduct->getName()
-                    )
-                );
-            }
+            Mage::logException($e);
+
+            $this->_getSession()->addError(
+                Mage::helper('mulberry_warranty')->__('We were not able to add the warranty product to cart, but we did add the %s to cart',
+                    $originalProduct->getName()
+                )
+            );
         }
     }
 
@@ -152,13 +156,13 @@ class Mulberry_Warranty_Model_Observer
     }
 
     /**
-     * Get checkout session model instance
+     * Get catalog session model instance
      *
-     * @return Mage_Checkout_Model_Session
+     * @return Mage_Catalog_Model_Session
      */
     protected function _getSession()
     {
-        return Mage::getSingleton('checkout/session');
+        return Mage::getSingleton('catalog/session');
     }
 
     /**

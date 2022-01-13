@@ -1,6 +1,13 @@
 Mulberry_Warranty changelog
 ========================
 
+1.3.0:
+- Added validation for the "add to cart" action for the warranty product
+- Reworked post-purchase hook functionality to exclude order items with the warranty products associated from the payload
+- Improved messaging when the warranty item is added to the shopping cart
+- Added error message whenever warranty product failed to add to the shopping cart
+- Adjusted token field namings for the system config
+
 1.2.5:
 - Added "warranty_offer_id" to the corresponding payloads
 

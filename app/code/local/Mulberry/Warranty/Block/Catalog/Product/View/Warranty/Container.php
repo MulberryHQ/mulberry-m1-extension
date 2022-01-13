@@ -78,48 +78,22 @@ class Mulberry_Warranty_Block_Catalog_Product_View_Warranty_Container extends Ma
     }
 
     /**
-     * Retrieve product gallery URLs
+     * Return product image gallery info
      *
-     * @return array
+     * @return false|string
      */
     public function getGalleryImagesInfo()
     {
-        $result = [];
-        $product = $this->getProduct();
-        $images = $product->getMediaGalleryImages();
-        if (!$images instanceof Varien_Data_Collection) {
-            return $images;
-        }
-
-        foreach ($images as $image) {
-            $image->set;
-            $image->setData(
-                'url',
-                (string) Mage::helper('catalog/image')->init($product, 'image', $image->getFile())->resize(700)
-            );
-            $result[] = ['src' => $image->getUrl()];
-        }
-
-        return json_encode($result);
+        return json_encode(Mage::helper('mulberry_warranty/product')->getGalleryImagesInfo($this->getProduct()));
     }
 
     /**
-     * Return breadcrumbs information, if the "Use Categories Path for Product URLs" setting is enabled.
+     * Return product breadcrumbs
+     *
+     * @return false|string
      */
     public function getBreadcrumbsInfo()
     {
-        $breacrumbs = Mage::helper('catalog')->getBreadcrumbPath();
-        $result = [];
-
-        foreach ($breacrumbs as $key => $crumb) {
-            if ($isCategory = strpos($key, 'category') === 0) {
-                $result[] = [
-                    'category' => $crumb['label'],
-                    'url' => $crumb['link'],
-                ];
-            }
-        }
-
-        return json_encode($result);
+        return json_encode(Mage::helper('mulberry_warranty/product')->getProductBreadcrumbs($this->getProduct()));
     }
 }

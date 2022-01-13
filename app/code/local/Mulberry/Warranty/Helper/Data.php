@@ -18,7 +18,7 @@ class Mulberry_Warranty_Helper_Data extends Mage_Core_Helper_Abstract
     const XML_PATH_PARTNER_URL = 'mulberry_warranty/general/partner_url';
     const XML_PATH_PLATFORM_DOMAIN = 'mulberry_warranty/general/platform_domain';
     const XML_PATH_RETAILER_ID = 'mulberry_warranty/general/retailer_id';
-    const XML_PATH_API_TOKEN = 'mulberry_warranty/general/api_token';
+    const XML_PATH_PRIVATE_TOKEN = 'mulberry_warranty/general/private_token';
     const XML_PATH_SEND_CART_DATA = 'mulberry_warranty/general/send_cart_data';
     const XML_PATH_PUBLIC_TOKEN = 'mulberry_warranty/general/public_token';
 
@@ -79,7 +79,7 @@ class Mulberry_Warranty_Helper_Data extends Mage_Core_Helper_Abstract
      */
     public function getApiToken()
     {
-        return Mage::getStoreConfig(self::XML_PATH_API_TOKEN);
+        return Mage::getStoreConfig(self::XML_PATH_PRIVATE_TOKEN);
     }
 
     /**
